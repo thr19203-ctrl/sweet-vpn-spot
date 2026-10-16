@@ -4,11 +4,11 @@ export type Dict = {
   faq: string; community: string; communityDesc: string; open: string; rights: string;
 };
 
-const mk = (a: string[]): Dict => ({
+const mk = (x: string[]): Dict => { const a = x as [string, string, string, string, string, string, string, string, string, string, string, string, string, string, string, string, string, string]; return {
   nav: a[0].split("|"), login: a[1], get: a[2], h1: a[3], sub: a[4], join: a[5], plans: a[6],
   pricing: a[7], monthly: a[8], yearly: a[9], popular: a[10], buy: a[11], perMonth: a[12],
   faq: a[13], community: a[14], communityDesc: a[15], open: a[16], rights: a[17],
-});
+}; };
 
 export const LANGS: Record<string, { name: string; d: Dict; rtl?: boolean }> = {
   en: { name: "English", d: mk(["Product|Protocols|Download|Pricing|Community", "Log in", "Get", "Bypass any block.", "Fresh VPN configs for VLESS, WireGuard and Shadowsocks — tested, fast and always in one place.", "Join Discord", "Pricing", "Choose your plan.", "Monthly", "Yearly", "MOST POPULAR", "Get started", "/ mo", "Frequently asked questions.", "Join the community.", "Free configs every day, news and setup help — all in our Discord.", "Open Discord ↗", "All rights reserved."]) },
