@@ -56,6 +56,8 @@
   --color-code-com: var(--code-com);
   --color-code-num: var(--code-num);
   --color-online: var(--online);
+  --color-neon: var(--neon);
+  --shadow-neon: var(--shadow-neon);
   --font-sans: "Inter Tight", "Inter", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
   --color-sidebar: var(--sidebar);
@@ -94,6 +96,8 @@
   --code-com: oklch(0.6 0.08 150);
   --code-num: oklch(0.75 0.14 320);
   --online: oklch(0.75 0.17 150);
+  --neon: oklch(0.78 0.16 210);
+  --shadow-neon: 0 20px 50px -15px color-mix(in oklab, var(--neon) 45%, transparent), 0 0 0 1px color-mix(in oklab, var(--neon) 60%, transparent);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
