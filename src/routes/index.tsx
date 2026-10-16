@@ -141,6 +141,125 @@ function Visual({ i }: { i: number }) {
   );
 }
 
+const plans = [
+  { n: "Free", p: "0 ₽", d: "Ежедневные конфиги в Discord", f: ["VLESS, Shadowsocks", "5 локаций", "До 50 Мбит/с"] },
+  { n: "Pro", p: "199 ₽", d: "Приватные серверы без перегрузки", f: ["Все протоколы", "40+ локаций", "До 1 Гбит/с", "Поддержка 24/7"], hot: true },
+  { n: "Team", p: "499 ₽", d: "До 5 устройств на одной подписке", f: ["Всё из Pro", "5 устройств", "Выделенный IP"] },
+];
+
+function Pricing() {
+  return (
+    <section className="mx-auto max-w-6xl px-5 py-20">
+      <h2 className="text-center text-4xl font-semibold tracking-tight sm:text-5xl">Выбери свой тариф.</h2>
+      <div className="mt-12 grid gap-5 md:grid-cols-3">
+        {plans.map((p) => (
+          <div key={p.n} className={`group relative rounded-2xl border bg-card p-6 transition-all duration-300 hover:-translate-y-2 hover:shadow-neon ${p.hot ? "border-neon/50" : "border-border"}`}>
+            {p.hot && <span className="absolute -top-3 right-6 rounded-md bg-primary px-3 py-1 text-xs font-bold tracking-wider text-primary-foreground">ПОПУЛЯРНЫЙ</span>}
+            <div className="text-lg font-semibold">{p.n}</div>
+            <div className="mt-2 text-4xl font-semibold">{p.p}<span className="text-sm text-muted-foreground"> / мес</span></div>
+            <p className="mt-2 text-sm text-muted-foreground">{p.d}</p>
+            <ul className="mt-6 space-y-2 text-sm">{p.f.map((x) => <li key={x}><span className="mr-2 text-online">✓</span>{x}</li>)}</ul>
+            <a href={DISCORD} target="_blank" rel="noreferrer" className="mt-6 block rounded-xl bg-secondary py-3 text-center text-sm font-semibold transition-colors group-hover:bg-primary group-hover:text-primary-foreground">Получить</a>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+type Cell = boolean | string;
+const cmp: { g: string; rows: [string, Cell, Cell, Cell][] }[] = [
+  { g: "Протоколы", rows: [["VLESS Reality", true, false, false], ["WireGuard", true, true, false], ["Hysteria2", true, false, false], ["Обход DPI", true, false, false]] },
+  { g: "Скорость", rows: [["Макс. скорость", "1 Гбит/с", "100 Мбит/с", "20 Мбит/с"], ["Средний пинг", "<30 мс", "~80 мс", "~150 мс"], ["Локации", "40+", "10", "3"]] },
+  { g: "Доступ", rows: [["Без логов", true, true, false], ["Автопроверка", true, false, false], ["Поддержка 24/7", true, false, false]] },
+];
+
+const Mark = ({ v }: { v: Cell }) =>
+  typeof v === "string" ? <span className="font-semibold">{v}</span> : v ? (
+    <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">✓</span>
+  ) : (
+    <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-accent text-xs text-muted-foreground">✕</span>
+  );
+
+function Compare() {
+  return (
+    <section className="mx-auto max-w-5xl px-5 py-20">
+      <h2 className="text-center text-4xl font-semibold tracking-tight sm:text-5xl">Сравни Cfg с другими VPN.</h2>
+      <p className="mx-auto mt-4 max-w-xl text-center text-muted-foreground">Главное рядом: протоколы, скорость, пинг и доступ.</p>
+      <div className="mt-12 overflow-x-auto rounded-2xl border border-border bg-card">
+        <table className="w-full min-w-[560px] text-sm">
+          <thead>
+            <tr className="border-b border-border">
+              <th />
+              <th className="relative bg-muted px-4 py-6"><div className="flex flex-col items-center gap-2"><Logo />Cfg</div></th>
+              <th className="px-4 py-6 font-medium text-muted-foreground">Обычный VPN</th>
+              <th className="px-4 py-6 font-medium text-muted-foreground">Бесплатный прокси</th>
+            </tr>
+          </thead>
+          <tbody>
+            {cmp.map((g) => (
+              <>
+                <tr key={g.g} className="border-b border-border bg-accent/40"><td colSpan={4} className="px-5 py-3 font-semibold">{g.g}</td></tr>
+                {g.rows.map(([l, a, b, c]) => (
+                  <tr key={l} className="border-b border-border last:border-0">
+                    <td className="px-5 py-4 text-muted-foreground">{l}</td>
+                    <td className="bg-muted px-4 py-4 text-center"><Mark v={a} /></td>
+                    <td className="px-4 py-4 text-center"><Mark v={b} /></td>
+                    <td className="px-4 py-4 text-center"><Mark v={c} /></td>
+                  </tr>
+                ))}
+              </>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  );
+}
+
+const faqs = [
+  ["Что такое VPN конфиг?", "Это файл или ссылка с настройками сервера. Импортируешь её в приложение (v2rayNG, Hiddify, WireGuard) — и подключение готово."],
+  ["Как получить бесплатный конфиг?", "Зайди в наш Discord, открой канал #free-configs и скопируй свежий конфиг. Новые выкладываются каждый день."],
+  ["Как купить Pro?", "Нажми «Получить», зайди в Discord и создай тикет в #premium. Оплата картой или криптой, выдача за пару минут."],
+  ["Какой протокол выбрать?", "Для обхода жёстких блокировок — VLESS Reality. Для скорости — WireGuard или Hysteria2. Не уверен — спроси в #support."],
+  ["Как подключиться на iPhone?", "Установи Streisand или Hiddify из App Store, скопируй ссылку vless:// и нажми «Импорт из буфера»."],
+  ["Конфиг перестал работать, что делать?", "Серверы проверяются каждые 10 минут. Возьми новый конфиг в Discord или напиши в поддержку — заменим бесплатно."],
+];
+
+function Faq() {
+  return (
+    <section className="mx-auto max-w-3xl px-5 py-20">
+      <h2 className="text-center text-4xl font-semibold tracking-tight sm:text-5xl">Частые вопросы.</h2>
+      <div className="mt-10 space-y-3">
+        {faqs.map(([q, a]) => (
+          <details key={q} className="group rounded-2xl border border-border bg-card px-5 py-4 transition-colors hover:border-neon/40">
+            <summary className="flex cursor-pointer list-none items-center justify-between font-medium">
+              {q}<span className="text-muted-foreground transition-transform group-open:rotate-45">+</span>
+            </summary>
+            <p className="mt-3 text-sm text-muted-foreground">{a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+const langs = ["English", "Русский", "Español", "Deutsch", "Français", "Português", "Italiano", "Türkçe", "Polski", "Українська", "Қазақша", "O'zbekcha", "العربية", "हिन्दी", "Bahasa Indonesia", "Tiếng Việt", "ไทย", "日本語", "한국어", "中文"];
+
+function LangSwitcher() {
+  const [lang, setLang] = useState("Русский");
+  return (
+    <div className="mx-auto mt-8 flex max-w-6xl justify-center sm:justify-end">
+      <label className="flex items-center gap-2 rounded-xl border border-border bg-secondary px-3 py-2 text-sm">
+        <span aria-hidden>🌐</span>
+        <select aria-label="Язык" value={lang} onChange={(e) => setLang(e.target.value)} className="bg-transparent text-foreground outline-none">
+          {langs.map((l) => <option key={l} value={l} className="bg-card">{l}</option>)}
+        </select>
+      </label>
+    </div>
+  );
+}
+
 function Index() {
   const [cookie, setCookie] = useState(true);
   return (
@@ -185,6 +304,10 @@ function Index() {
         </section>
       ))}
 
+      <Pricing />
+      <Compare />
+      <Faq />
+
       <section className="px-5 py-24 text-center">
         <h2 className="text-4xl font-semibold tracking-tight sm:text-5xl">Присоединяйся к сообществу.</h2>
         <p className="mx-auto mt-4 max-w-md text-muted-foreground">Бесплатные конфиги каждый день, новости и помощь с настройкой — всё в нашем Discord.</p>
@@ -197,6 +320,7 @@ function Index() {
           <span>© 2026 Cfg. Все права защищены.</span>
           <a href={DISCORD} target="_blank" rel="noreferrer" className="hover:text-foreground">Discord</a>
         </div>
+        <LangSwitcher />
       </footer>
 
       {cookie && (
