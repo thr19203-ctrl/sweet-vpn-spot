@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import wave from "@/assets/wave.jpg";
 
 const DISCORD = "https://discord.gg/6DsXVJkEJw";
@@ -198,8 +198,8 @@ function Compare() {
           </thead>
           <tbody>
             {cmp.map((g) => (
-              <>
-                <tr key={g.g} className="border-b border-border bg-accent/40"><td colSpan={4} className="px-5 py-3 font-semibold">{g.g}</td></tr>
+              <Fragment key={g.g}>
+                <tr className="border-b border-border bg-accent/40"><td colSpan={4} className="px-5 py-3 font-semibold">{g.g}</td></tr>
                 {g.rows.map(([l, a, b, c]) => (
                   <tr key={l} className="border-b border-border last:border-0">
                     <td className="px-5 py-4 text-muted-foreground">{l}</td>
@@ -208,7 +208,7 @@ function Compare() {
                     <td className="px-4 py-4 text-center"><Mark v={c} /></td>
                   </tr>
                 ))}
-              </>
+              </Fragment>
             ))}
           </tbody>
         </table>
