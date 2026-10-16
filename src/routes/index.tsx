@@ -131,7 +131,7 @@ function Visual({ i }: { i: number }) {
   ][i];
   return (
     <div className="rounded-2xl border border-border bg-card p-4">
-      {rows.map(([a, b]) => (
+      {(rows ?? []).map(([a, b]) => (
         <div key={a} className="mb-2 flex items-center justify-between rounded-xl bg-muted px-4 py-3 last:mb-0">
           <span className="flex items-center gap-2 font-mono text-sm"><span className="h-2 w-2 rounded-full bg-online" />{a}</span>
           <span className="text-xs text-muted-foreground">{b}</span>
