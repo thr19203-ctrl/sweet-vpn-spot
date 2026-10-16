@@ -3,8 +3,14 @@ import { Fragment, createContext, useContext, useEffect, useRef, useState } from
 import wave from "@/assets/wave.jpg";
 import laptop from "@/assets/laptop.jpg";
 import { LANGS, type Dict } from "@/lib/i18n";
+import { CONTENT, type Content } from "@/lib/i18n-content";
+import f1 from "@/assets/f1.jpg";
+import f2 from "@/assets/f2.jpg";
+import f3 from "@/assets/f3.jpg";
+import f4 from "@/assets/f4.jpg";
 
-const T = createContext<Dict>(LANGS["ru"]!.d);
+type TT = Dict & Content;
+const T = createContext<TT>({ ...LANGS["ru"]!.d, ...CONTENT["ru"]! });
 const useT = () => useContext(T);
 
 function Reveal({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
@@ -57,6 +63,39 @@ const Btn = ({ href, children, light }: { href: string; children: React.ReactNod
   </a>
 );
 
+function DiscordLogo({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-label="Discord" role="img">
+      <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z" />
+    </svg>
+  );
+}
+
+function Cursor() {
+  const dot = useRef<HTMLDivElement>(null);
+  const ring = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!window.matchMedia("(pointer: fine)").matches) return;
+    document.documentElement.classList.add("has-cursor");
+    let x = innerWidth / 2, y = innerHeight / 2, rx = x, ry = y, big = false, raf = 0;
+    const move = (e: PointerEvent) => { x = e.clientX; y = e.clientY; big = !!(e.target as HTMLElement).closest("a,button,select,summary"); };
+    const loop = () => {
+      rx += (x - rx) * 0.15; ry += (y - ry) * 0.15;
+      if (dot.current) dot.current.style.transform = `translate(${x}px,${y}px) translate(-50%,-50%)`;
+      if (ring.current) ring.current.style.transform = `translate(${rx}px,${ry}px) translate(-50%,-50%) scale(${big ? 1.8 : 1})`;
+      raf = requestAnimationFrame(loop);
+    };
+    addEventListener("pointermove", move); loop();
+    return () => { removeEventListener("pointermove", move); cancelAnimationFrame(raf); document.documentElement.classList.remove("has-cursor"); };
+  }, []);
+  return (
+    <>
+      <div ref={ring} className="pointer-events-none fixed left-0 top-0 z-[100] hidden h-9 w-9 rounded-full border border-foreground/60 transition-[width,height] duration-300 [.has-cursor_&]:block" style={{ transitionProperty: "none" }} />
+      <div ref={dot} className="pointer-events-none fixed left-0 top-0 z-[100] hidden h-1.5 w-1.5 rounded-full bg-foreground [.has-cursor_&]:block" />
+    </>
+  );
+}
+
 function Nav() {
   const t = useT();
   const ids = ["Продукт", "Протоколы", "Скачать", "Тарифы", "Сообщество"];
@@ -80,36 +119,26 @@ function Nav() {
   );
 }
 
-const features = [
-  { id: "Продукт", t: "Конфиги, которые просто работают.", d: "Каждый конфиг проверяется автоматически каждые 10 минут. Мёртвые серверы удаляются, новые добавляются — ты всегда получаешь только рабочее.", tags: ["Автопроверка", "Пинг в реальном времени", "Без логов", "Безлимит"] },
-  { id: "Протоколы", t: "Любой протокол — в одном месте.", d: "VLESS Reality, WireGuard, Shadowsocks, Outline, Trojan и Hysteria2. Выбирай под свою сеть и обходи DPI без лишних настроек.", tags: ["VLESS Reality", "WireGuard", "Shadowsocks", "Hysteria2"] },
-  { id: "Скачать", t: "Импорт в один клик на любом устройстве.", d: "Копируй ссылку, сканируй QR или скачивай файл. Подходит для v2rayNG, Hiddify, Nekobox, Streisand, Outline и WireGuard.", tags: ["Android", "iOS", "Windows", "macOS"] },
-  { id: "Discord", t: "Бесплатные конфиги каждый день в Discord.", d: "Ежедневные раздачи, приватные премиум-серверы для участников и поддержка 24/7 прямо в нашем сообществе.", tags: ["Ежедневные раздачи", "Премиум", "Поддержка 24/7", "Discord"] },
+const feats = (t: TT) => [
+  { id: "Продукт", t: t.f1t, d: t.f1d, img: f1, tags: t.f1tags.split("|") },
+  { id: "Протоколы", t: t.f2t, d: t.f2d, img: f2, tags: ["VLESS Reality", "WireGuard", "Shadowsocks", "Hysteria2"] },
+  { id: "Скачать", t: t.f3t, d: t.f3d, img: f3, tags: ["Android", "iOS", "Windows", "macOS"] },
+  { id: "Discord", t: t.f4t, d: t.f4d, img: f4, tags: ["#free-configs", "#premium", "#support", "24/7"] },
 ];
 
-function Visual({ i }: { i: number }) {
-  const rows = [
-    [["DE-Frankfurt-1", "24 ms"], ["NL-Amsterdam-2", "31 ms"], ["FI-Helsinki-1", "38 ms"], ["US-NewYork-3", "96 ms"]],
-    [["vless://reality", "TCP"], ["wireguard", "UDP"], ["ss://chacha20", "TCP"], ["hysteria2", "QUIC"]],
-    [["v2rayNG", "Android"], ["Streisand", "iOS"], ["Hiddify", "Windows"], ["Nekobox", "Linux"]],
-    [["#free-configs", "сегодня"], ["#premium", "закрыто"], ["#support", "онлайн"], ["#news", "новое"]],
-  ][i];
+function Visual({ src, alt }: { src: string; alt: string }) {
   return (
-    <div className="rounded-2xl border border-border bg-card p-4">
-      {(rows ?? []).map(([a, b]) => (
-        <div key={a} className="mb-2 flex items-center justify-between rounded-xl bg-muted px-4 py-3 last:mb-0">
-          <span className="flex items-center gap-2 font-mono text-sm"><span className="h-2 w-2 rounded-full bg-online" />{a}</span>
-          <span className="text-xs text-muted-foreground">{b}</span>
-        </div>
-      ))}
+    <div className="group relative overflow-hidden rounded-3xl border border-border bg-card">
+      <img src={src} alt={alt} width={1024} height={768} loading="lazy" className="aspect-[4/3] w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/60 to-transparent" />
     </div>
   );
 }
 
-const plans = [
-  { n: "Free", m: 0, d: "Ежедневные конфиги в Discord", f: ["VLESS, Shadowsocks", "5 локаций", "До 50 Мбит/с", "Сообщество"] },
-  { n: "Pro", m: 199, d: "Приватные серверы без перегрузки", f: ["Все протоколы", "40+ локаций", "До 1 Гбит/с", "Поддержка 24/7", "Автозамена конфигов"], hot: true },
-  { n: "Team", m: 499, d: "До 5 устройств на одной подписке", f: ["Всё из Pro", "5 устройств", "Выделенный IP", "Приоритетная поддержка"] },
+const mkPlans = (t: TT) => [
+  { n: "Free", m: 0, d: t.pd1, f: ["VLESS, Shadowsocks", `5 ${t.s3}`, "50 Mbps", t.comm] },
+  { n: "Pro", m: 199, d: t.pd2, f: [t.allProto, `40+ ${t.s3}`, "1 Gbps", `${t.s4} 24/7`, t.autoCheck], hot: true },
+  { n: "Team", m: 499, d: t.pd3, f: [t.allPro, `5 ${t.devices}`, t.dedIp, `${t.s4} 24/7`] },
 ];
 
 function Pricing() {
@@ -129,7 +158,7 @@ function Pricing() {
         </div>
       </Reveal>
       <div className="mt-14 grid gap-5 md:grid-cols-3">
-        {plans.map((p, i) => {
+        {mkPlans(t).map((p, i) => {
           const price = year ? Math.round(p.m * 0.8) : p.m;
           return (
             <Reveal key={p.n} delay={i * 120}>
@@ -156,10 +185,10 @@ function Pricing() {
 }
 
 type Cell = boolean | string;
-const cmp: { g: string; rows: [string, Cell, Cell, Cell][] }[] = [
-  { g: "Протоколы", rows: [["VLESS Reality", true, false, false], ["WireGuard", true, true, false], ["Hysteria2", true, false, false], ["Обход DPI", true, false, false]] },
-  { g: "Скорость", rows: [["Макс. скорость", "1 Гбит/с", "100 Мбит/с", "20 Мбит/с"], ["Средний пинг", "<30 мс", "~80 мс", "~150 мс"], ["Локации", "40+", "10", "3"]] },
-  { g: "Доступ", rows: [["Без логов", true, true, false], ["Автопроверка", true, false, false], ["Поддержка 24/7", true, false, false]] },
+const mkCmp = (t: TT): { g: string; rows: [string, Cell, Cell, Cell][] }[] => [
+  { g: t.nav[1] ?? "", rows: [["VLESS Reality", true, false, false], ["WireGuard", true, true, false], ["Hysteria2", true, false, false], ["DPI bypass", true, false, false]] },
+  { g: t.speed, rows: [[t.maxSpeed, "1 Gbps", "100 Mbps", "20 Mbps"], [t.s2, "<30 ms", "~80 ms", "~150 ms"], [t.s3, "40+", "10", "3"]] },
+  { g: t.access, rows: [[t.noLogs, true, true, false], [t.autoCheck, true, false, false], [`${t.s4} 24/7`, true, false, false]] },
 ];
 
 const Mark = ({ v }: { v: Cell }) =>
@@ -170,22 +199,23 @@ const Mark = ({ v }: { v: Cell }) =>
   );
 
 function Compare() {
+  const t = useT();
   return (
     <section className="mx-auto max-w-5xl px-5 py-20">
-      <h2 className="text-center text-4xl font-semibold tracking-tight sm:text-5xl">Сравни Cfg с другими VPN.</h2>
-      <p className="mx-auto mt-4 max-w-xl text-center text-muted-foreground">Главное рядом: протоколы, скорость, пинг и доступ.</p>
+      <h2 className="text-center text-4xl font-semibold tracking-tight sm:text-5xl">{t.cmpT}</h2>
+      <p className="mx-auto mt-4 max-w-xl text-center text-muted-foreground">{t.cmpS}</p>
       <div className="mt-12 overflow-x-auto rounded-2xl border border-border bg-card">
         <table className="w-full min-w-[560px] text-sm">
           <thead>
             <tr className="border-b border-border">
               <th />
               <th className="relative bg-muted px-4 py-6"><div className="flex flex-col items-center gap-2"><Logo />Cfg</div></th>
-              <th className="px-4 py-6 font-medium text-muted-foreground">Обычный VPN</th>
-              <th className="px-4 py-6 font-medium text-muted-foreground">Бесплатный прокси</th>
+              <th className="px-4 py-6 font-medium text-muted-foreground">{t.ordVpn}</th>
+              <th className="px-4 py-6 font-medium text-muted-foreground">{t.freeProxy}</th>
             </tr>
           </thead>
           <tbody>
-            {cmp.map((g) => (
+            {mkCmp(t).map((g) => (
               <Fragment key={g.g}>
                 <tr className="border-b border-border bg-accent/40"><td colSpan={4} className="px-5 py-3 font-semibold">{g.g}</td></tr>
                 {g.rows.map(([l, a, b, c]) => (
@@ -205,22 +235,13 @@ function Compare() {
   );
 }
 
-const faqs = [
-  ["Что такое VPN конфиг?", "Это файл или ссылка с настройками сервера. Импортируешь её в приложение (v2rayNG, Hiddify, WireGuard) — и подключение готово."],
-  ["Как получить бесплатный конфиг?", "Зайди в наш Discord, открой канал #free-configs и скопируй свежий конфиг. Новые выкладываются каждый день."],
-  ["Как купить Pro?", "Нажми «Получить», зайди в Discord и создай тикет в #premium. Оплата картой или криптой, выдача за пару минут."],
-  ["Какой протокол выбрать?", "Для обхода жёстких блокировок — VLESS Reality. Для скорости — WireGuard или Hysteria2. Не уверен — спроси в #support."],
-  ["Как подключиться на iPhone?", "Установи Streisand или Hiddify из App Store, скопируй ссылку vless:// и нажми «Импорт из буфера»."],
-  ["Конфиг перестал работать, что делать?", "Серверы проверяются каждые 10 минут. Возьми новый конфиг в Discord или напиши в поддержку — заменим бесплатно."],
-];
-
 function Faq() {
   const t = useT();
   return (
     <section className="mx-auto max-w-3xl px-5 py-20">
       <h2 className="text-center text-4xl font-semibold tracking-tight sm:text-5xl">{t.faq}</h2>
       <div className="mt-10 space-y-3">
-        {faqs.map(([q, a]) => (
+        {[[t.q1, t.a1], [t.q2, t.a2], [t.q3, t.a3], [t.q4, t.a4]].map(([q, a]) => (
           <details key={q} className="group rounded-2xl border border-border bg-card px-5 py-4 transition-colors hover:border-neon/40">
             <summary className="flex cursor-pointer list-none items-center justify-between font-medium">
               {q}<span className="text-muted-foreground transition-transform group-open:rotate-45">+</span>
@@ -254,11 +275,12 @@ function Index() {
   useEffect(() => { const l = localStorage.getItem("lang"); if (l && LANGS[l]) setLangState(l); }, []);
   useEffect(() => { document.documentElement.lang = lang; document.documentElement.dir = LANGS[lang]?.rtl ? "rtl" : "ltr"; }, [lang]);
   const setLang = (l: string) => { setLangState(l); localStorage.setItem("lang", l); };
-  const t = (LANGS[lang] ?? LANGS["ru"]!).d;
+  const t: TT = { ...(LANGS[lang] ?? LANGS["ru"]!).d, ...(CONTENT[lang] ?? CONTENT["ru"]!) };
   return (
     <T.Provider value={t}>
     <div className="min-h-screen overflow-x-hidden bg-background">
-      <div className="relative">
+      <Cursor />
+      <div className="relative overflow-hidden">
         <img src={wave} alt="" width={1920} height={1088} className="pointer-events-none absolute inset-x-0 top-0 h-[900px] w-full object-cover opacity-80" />
         <div className="absolute inset-x-0 top-[600px] h-[300px] bg-gradient-to-b from-transparent to-background" />
         <Nav />
@@ -269,30 +291,30 @@ function Index() {
             <Btn href={DISCORD} light>{t.join}</Btn>
             <Btn href="#Тарифы">{t.plans}</Btn>
           </div>
-          <p className="mt-5 text-xs text-muted-foreground">Используя Cfg, вы соглашаетесь с <a href={DISCORD} className="underline">Условиями использования</a>.</p>
-          <div className="mx-auto mt-14 max-w-5xl animate-in fade-in zoom-in-95 duration-1000"><img src={laptop} alt="Приложение Cfg на ноутбуке" width={1600} height={1008} className="animate-float w-full [mask-image:radial-gradient(ellipse_at_center,black_55%,transparent_75%)]" /></div>
+          <p className="mt-5 text-xs text-muted-foreground">{t.terms} <a href={DISCORD} className="underline">{t.termsLink}</a>.</p>
+          <div className="mx-auto mt-14 max-w-5xl animate-in fade-in zoom-in-95 duration-1000"><img src={laptop} alt="Cfg VPN" width={1600} height={1008} className="animate-float w-full [mask-image:radial-gradient(ellipse_at_center,black_55%,transparent_75%)]" /></div>
         </section>
       </div>
 
-      <section className="border-y border-border bg-card/40 px-5 py-14 text-center">
-        <p className="text-sm text-muted-foreground">Нам доверяют более 50 000 человек</p>
+      <section className="relative z-10 border-y border-border bg-background px-5 py-14 text-center">
+        <p className="text-sm text-muted-foreground">{t.trust}</p>
         <div className="mx-auto mt-8 grid max-w-4xl grid-cols-2 gap-8 sm:grid-cols-4">
-          {[["99.9%", "Аптайм серверов"], ["<30мс", "Средний пинг"], ["40+", "Локаций"], ["24/7", "Поддержка"]].map(([a, b]) => (
+          {[["99.9%", t.s1], ["<30 ms", t.s2], ["40+", t.s3], ["24/7", t.s4]].map(([a, b]) => (
             <div key={b}><div className="text-3xl font-semibold">{a}</div><div className="mt-1 text-sm text-muted-foreground">{b}</div></div>
           ))}
         </div>
       </section>
 
-      {features.map((f, i) => (
+      {feats(t).map((f, i) => (
         <section key={f.id} id={f.id} className="mx-auto grid max-w-6xl items-center gap-10 px-5 py-20 md:grid-cols-2">
           <Reveal className={i % 2 ? "md:order-2" : ""}>
             <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">{f.t}</h2>
             <p className="mt-4 text-muted-foreground">{f.d}</p>
             <ul className="mt-6 grid grid-cols-2 gap-2 text-sm">
-              {f.tags.map((t) => <li key={t} className="flex items-center gap-2"><span className="text-muted-foreground">✓</span>{t}</li>)}
+              {f.tags.map((x) => <li key={x} className="flex items-center gap-2"><span className="text-muted-foreground">✓</span>{x}</li>)}
             </ul>
           </Reveal>
-          <Reveal delay={150}><Visual i={i} /></Reveal>
+          <Reveal delay={150}><Visual src={f.img} alt={f.t} /></Reveal>
         </section>
       ))}
 
@@ -300,10 +322,19 @@ function Index() {
       <Compare />
       <Faq />
 
-      <section className="px-5 py-24 text-center">
-        <Reveal><h2 className="text-4xl font-semibold tracking-tight sm:text-5xl">{t.community}</h2>
-        <p className="mx-auto mt-4 max-w-md text-muted-foreground">{t.communityDesc}</p>
-        <div className="mt-8"><Btn href={DISCORD} light>{t.open}</Btn></div></Reveal>
+      <section className="px-5 py-24">
+        <Reveal>
+          <div className="relative mx-auto max-w-4xl overflow-hidden rounded-[2rem] bg-discord px-6 py-16 text-center text-discord-foreground shadow-discord">
+            <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-discord-foreground/10 blur-2xl" />
+            <div className="pointer-events-none absolute -bottom-20 -left-10 h-64 w-64 rounded-full bg-discord-foreground/10 blur-2xl" />
+            <DiscordLogo className="animate-float mx-auto h-20 w-20 sm:h-24 sm:w-24" />
+            <h2 className="relative mt-6 text-4xl font-bold tracking-tight sm:text-6xl">{t.community}</h2>
+            <p className="relative mx-auto mt-4 max-w-md text-base font-medium text-discord-foreground/90 sm:text-lg">{t.communityDesc}</p>
+            <a href={DISCORD} target="_blank" rel="noreferrer" className="relative mt-8 inline-flex items-center gap-2 rounded-xl bg-discord-foreground px-7 py-3.5 text-[15px] font-semibold text-discord transition-transform duration-300 hover:scale-105">
+              <DiscordLogo className="h-5 w-5" />{t.open}
+            </a>
+          </div>
+        </Reveal>
       </section>
 
       <footer className="border-t border-border px-5 py-10">
@@ -317,10 +348,10 @@ function Index() {
 
       {cookie && (
         <div className="fixed inset-x-0 bottom-0 z-50 flex flex-col gap-4 border-t border-border bg-card/95 p-5 backdrop-blur sm:flex-row sm:items-center sm:justify-between">
-          <div><div className="font-medium">Мы используем cookie</div><p className="text-sm text-muted-foreground">Чтобы сайт работал стабильно и мы понимали, как его улучшить.</p></div>
+          <div><div className="font-medium">{t.cookieT}</div><p className="text-sm text-muted-foreground">{t.cookieD}</p></div>
           <div className="flex gap-2">
-            <button onClick={() => setCookie(false)} className="rounded-full bg-accent px-4 py-2 text-sm">Только необходимые</button>
-            <button onClick={() => setCookie(false)} className="rounded-full bg-accent px-4 py-2 text-sm">Принять все</button>
+            <button onClick={() => setCookie(false)} className="rounded-full bg-accent px-4 py-2 text-sm">{t.necessary}</button>
+            <button onClick={() => setCookie(false)} className="rounded-full bg-accent px-4 py-2 text-sm">{t.acceptAll}</button>
           </div>
         </div>
       )}
