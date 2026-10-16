@@ -4,7 +4,7 @@ import wave from "@/assets/wave.jpg";
 import laptop from "@/assets/laptop.jpg";
 import { LANGS, type Dict } from "@/lib/i18n";
 
-const T = createContext<Dict>(LANGS.ru.d);
+const T = createContext<Dict>(LANGS["ru"]!.d);
 const useT = () => useContext(T);
 
 function Reveal({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
@@ -12,7 +12,7 @@ function Reveal({ children, className = "", delay = 0 }: { children: React.React
   const [on, setOn] = useState(false);
   useEffect(() => {
     const el = ref.current; if (!el) return;
-    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setOn(true); io.disconnect(); } }, { threshold: 0.15 });
+    const io = new IntersectionObserver(([e]) => { if (e?.isIntersecting) { setOn(true); io.disconnect(); } }, { threshold: 0.15 });
     io.observe(el); return () => io.disconnect();
   }, []);
   return <div ref={ref} style={{ transitionDelay: `${delay}ms` }} className={`transition-all duration-700 ease-out ${on ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"} ${className}`}>{children}</div>;
@@ -252,9 +252,9 @@ function Index() {
   const [cookie, setCookie] = useState(true);
   const [lang, setLangState] = useState("ru");
   useEffect(() => { const l = localStorage.getItem("lang"); if (l && LANGS[l]) setLangState(l); }, []);
-  useEffect(() => { document.documentElement.lang = lang; document.documentElement.dir = LANGS[lang].rtl ? "rtl" : "ltr"; }, [lang]);
+  useEffect(() => { document.documentElement.lang = lang; document.documentElement.dir = LANGS[lang]?.rtl ? "rtl" : "ltr"; }, [lang]);
   const setLang = (l: string) => { setLangState(l); localStorage.setItem("lang", l); };
-  const t = LANGS[lang].d;
+  const t = (LANGS[lang] ?? LANGS["ru"]!).d;
   return (
     <T.Provider value={t}>
     <div className="min-h-screen overflow-x-hidden bg-background">
