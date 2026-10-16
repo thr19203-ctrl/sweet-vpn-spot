@@ -270,7 +270,7 @@ function Index() {
             <Btn href="#Тарифы">{t.plans}</Btn>
           </div>
           <p className="mt-5 text-xs text-muted-foreground">Используя Cfg, вы соглашаетесь с <a href={DISCORD} className="underline">Условиями использования</a>.</p>
-          <div className="mx-auto mt-14 max-w-5xl animate-in fade-in zoom-in-95 duration-1000"><img src={laptop} alt="Приложение Cfg на ноутбуке" width={1600} height={1008} className="animate-float w-full drop-shadow-2xl" /></div>
+          <div className="mx-auto mt-14 max-w-5xl animate-in fade-in zoom-in-95 duration-1000"><img src={laptop} alt="Приложение Cfg на ноутбуке" width={1600} height={1008} className="animate-float w-full [mask-image:radial-gradient(ellipse_at_center,black_55%,transparent_75%)]" /></div>
         </section>
       </div>
 
