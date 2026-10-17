@@ -4,10 +4,11 @@ import wave from "@/assets/wave.jpg";
 import laptop from "@/assets/laptop.jpg";
 import { LANGS, type Dict } from "@/lib/i18n";
 import { CONTENT, type Content } from "@/lib/i18n-content";
-import f1 from "@/assets/f1.jpg";
-import f2 from "@/assets/f2.jpg";
-import f3 from "@/assets/f3.jpg";
+import f1 from "@/assets/server-premium.jpg";
+import f2 from "@/assets/globe-premium.jpg";
+import f3 from "@/assets/devices-premium.jpg";
 import f4 from "@/assets/f4.jpg";
+import { PLANS, formatPrice, planPrice } from "@/lib/pricing";
 
 type TT = Dict & Content;
 const T = createContext<TT>({ ...LANGS["ru"]!.d, ...CONTENT["ru"]! });
@@ -128,17 +129,16 @@ const feats = (t: TT) => [
 
 function Visual({ src, alt }: { src: string; alt: string }) {
   return (
-    <div className="group relative overflow-hidden rounded-3xl border border-border bg-card">
-      <img src={src} alt={alt} width={1024} height={768} loading="lazy" className="aspect-[4/3] w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105" />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/60 to-transparent" />
+    <div className="vpn-visual group relative overflow-hidden rounded-2xl bg-card">
+      <img src={src} alt={alt} width={1024} height={768} loading="lazy" className="vpn-visual-image aspect-[4/3] w-full object-cover" />
     </div>
   );
 }
 
 const mkPlans = (t: TT) => [
-  { n: "Free", m: 0, d: t.pd1, f: ["VLESS, Shadowsocks", `5 ${t.s3}`, "50 Mbps", t.comm] },
-  { n: "Pro", m: 199, d: t.pd2, f: [t.allProto, `40+ ${t.s3}`, "1 Gbps", `${t.s4} 24/7`, t.autoCheck], hot: true },
-  { n: "Team", m: 499, d: t.pd3, f: [t.allPro, `5 ${t.devices}`, t.dedIp, `${t.s4} 24/7`] },
+  { n: PLANS[0].name, m: PLANS[0].monthly, d: t.pd1, f: ["VLESS, Shadowsocks", `5 ${t.s3}`, "50 Mbps", t.comm] },
+  { n: PLANS[1].name, m: PLANS[1].monthly, d: t.pd2, f: [t.allProto, `40+ ${t.s3}`, "1 Gbps", `${t.s4} 24/7`, t.autoCheck] },
+  { n: PLANS[2].name, m: PLANS[2].monthly, d: t.pd3, f: [t.allPro.replace(/Pro/g, "Plus"), `5 ${t.devices}`, t.dedIp, `${t.s4} 24/7`], hot: true },
 ];
 
 function Pricing() {
@@ -159,22 +159,22 @@ function Pricing() {
       </Reveal>
       <div className="mt-14 grid gap-5 md:grid-cols-3">
         {mkPlans(t).map((p, i) => {
-          const price = year ? Math.round(p.m * 0.8) : p.m;
+           const price = planPrice(p.m, year);
           return (
             <Reveal key={p.n} delay={i * 120}>
-              <div className={`group relative flex h-full flex-col rounded-3xl border p-7 transition-all duration-500 hover:-translate-y-2 hover:shadow-neon ${p.hot ? "border-foreground/25 bg-gradient-to-b from-accent to-card" : "border-border bg-card"}`}>
+              <div data-plan={p.n} className={`pricing-card group relative flex h-full flex-col rounded-2xl border p-7 transition-all duration-500 hover:-translate-y-2 hover:shadow-neon ${p.hot ? "pricing-card-pro border-primary bg-primary text-primary-foreground" : "border-border bg-card"}`}>
                 <div className="flex items-center justify-between">
                   <div className="text-xl font-semibold">{p.n}</div>
-                  {p.hot && <span className="rounded-full bg-primary px-3 py-1 text-[11px] font-bold tracking-wider text-primary-foreground">{t.popular}</span>}
+                  {p.hot && <span className="rounded-full bg-primary-foreground px-3 py-1 text-[11px] font-bold tracking-wider text-primary">{t.popular}</span>}
                 </div>
-                <p className="mt-2 text-sm text-muted-foreground">{p.d}</p>
+                <p className={`mt-2 text-sm ${p.hot ? "text-primary-foreground/70" : "text-muted-foreground"}`}>{p.d}</p>
                 <div className="mt-6 flex items-end gap-1">
-                  <span key={price} className="animate-in fade-in slide-in-from-bottom-2 text-5xl font-semibold tracking-tight duration-300">{price} ₽</span>
-                  <span className="mb-1.5 text-sm text-muted-foreground">{t.perMonth}</span>
+                  <span key={price} className="animate-in fade-in slide-in-from-bottom-2 whitespace-nowrap text-5xl font-semibold duration-300">{formatPrice(price)}</span>
+                  <span className={`mb-1.5 text-sm ${p.hot ? "text-primary-foreground/70" : "text-muted-foreground"}`}>{t.perMonth}</span>
                 </div>
-                <a href={DISCORD} target="_blank" rel="noreferrer" className={`mt-6 block rounded-xl py-3 text-center text-sm font-semibold transition-all duration-300 ${p.hot ? "bg-primary text-primary-foreground hover:opacity-90" : "bg-secondary group-hover:bg-primary group-hover:text-primary-foreground"}`}>{t.buy}</a>
-                <div className="my-6 h-px bg-border" />
-                <ul className="space-y-3 text-sm">{p.f.map((x) => <li key={x} className="flex items-center gap-3"><span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-accent text-[11px]">✓</span>{x}</li>)}</ul>
+                <a href={DISCORD} target="_blank" rel="noreferrer" className={`mt-6 block rounded-xl py-3 text-center text-sm font-semibold transition-all duration-300 ${p.hot ? "bg-primary-foreground text-primary hover:opacity-90" : "bg-secondary group-hover:bg-primary group-hover:text-primary-foreground"}`}>{t.buy}</a>
+                <div className={`my-6 h-px ${p.hot ? "bg-primary-foreground/15" : "bg-border"}`} />
+                <ul className="space-y-3 text-sm">{p.f.map((x) => <li key={x} className="flex items-center gap-3"><span className={`inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] ${p.hot ? "bg-primary-foreground/10" : "bg-accent"}`}>✓</span>{x}</li>)}</ul>
               </div>
             </Reveal>
           );
@@ -297,8 +297,7 @@ function Index() {
       </div>
 
       <section className="relative z-10 border-y border-border bg-background px-5 py-14 text-center">
-        <p className="text-sm text-muted-foreground">{t.trust}</p>
-        <div className="mx-auto mt-8 grid max-w-4xl grid-cols-2 gap-8 sm:grid-cols-4">
+        <div className="mx-auto grid max-w-4xl grid-cols-2 gap-8 sm:grid-cols-4">
           {[["99.9%", t.s1], ["<30 ms", t.s2], ["40+", t.s3], ["24/7", t.s4]].map(([a, b]) => (
             <div key={b}><div className="text-3xl font-semibold">{a}</div><div className="mt-1 text-sm text-muted-foreground">{b}</div></div>
           ))}
@@ -324,13 +323,11 @@ function Index() {
 
       <section className="px-5 py-24">
         <Reveal>
-          <div className="relative mx-auto max-w-4xl overflow-hidden rounded-[2rem] bg-discord px-6 py-16 text-center text-discord-foreground shadow-discord">
-            <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-discord-foreground/10 blur-2xl" />
-            <div className="pointer-events-none absolute -bottom-20 -left-10 h-64 w-64 rounded-full bg-discord-foreground/10 blur-2xl" />
+          <div className="discord-join relative mx-auto max-w-4xl overflow-hidden rounded-[2rem] bg-discord px-6 py-16 text-center text-discord-foreground shadow-discord">
             <DiscordLogo className="animate-float mx-auto h-20 w-20 sm:h-24 sm:w-24" />
             <h2 className="relative mt-6 text-4xl font-bold tracking-tight sm:text-6xl">{t.community}</h2>
             <p className="relative mx-auto mt-4 max-w-md text-base font-medium text-discord-foreground/90 sm:text-lg">{t.communityDesc}</p>
-            <a href={DISCORD} target="_blank" rel="noreferrer" className="relative mt-8 inline-flex items-center gap-2 rounded-xl bg-discord-foreground px-7 py-3.5 text-[15px] font-semibold text-discord transition-transform duration-300 hover:scale-105">
+            <a href={DISCORD} target="_blank" rel="noreferrer" className="discord-join-link relative mt-8 inline-flex items-center gap-2 rounded-xl bg-discord-foreground px-7 py-3.5 text-[15px] font-semibold text-discord transition-transform duration-300 hover:scale-105">
               <DiscordLogo className="h-5 w-5" />{t.open}
             </a>
           </div>
