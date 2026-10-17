@@ -8,3 +8,6 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Keep plan identities, base prices, and price formatting in `src/lib/pricing.ts` so the UI and concrete pricing tests share one source of truth.
+- Use global CSS motion classes for VPN visuals and Discord, respecting reduced-motion preferences so animations remain accessible.
