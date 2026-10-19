@@ -5,4 +5,4 @@
 - [x] Verify prices, animations, and mobile/desktop presentation.
 - [x] Replace the community card illustration with a cleaner premium version.
 - [x] Add the uploaded workflow video after the Discord feature section, with localized reference-style heading and description.
-- [ ] Verify workflow playback and desktop/mobile layout.
+- [x] Verify workflow playback and desktop/mobile layout.
