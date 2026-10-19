@@ -11,3 +11,4 @@
 
 - Keep plan identities, base prices, and price formatting in `src/lib/pricing.ts` so the UI and concrete pricing tests share one source of truth.
 - Use global CSS motion classes for VPN visuals and Discord, respecting reduced-motion preferences so animations remain accessible.
+- Keep the uploaded workflow video in a dedicated presentation component with CDN asset pointers and localized copy so it does not add binary media or player state to the page module.
