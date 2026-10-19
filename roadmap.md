@@ -6,3 +6,4 @@
 - [x] Replace the community card illustration with a cleaner premium version.
 - [x] Add the uploaded workflow video after the Discord feature section, with localized reference-style heading and description.
 - [x] Verify workflow playback and desktop/mobile layout.
+- [ ] Restyle the page to the supplied monochrome reference and verify navigation and layout.
