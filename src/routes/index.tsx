@@ -9,6 +9,7 @@ import f2 from "@/assets/globe-premium.jpg";
 import f3 from "@/assets/devices-premium.jpg";
 import f4 from "@/assets/f4.jpg";
 import { PLANS, formatPrice, planPrice } from "@/lib/pricing";
+import { Workflow } from "@/components/workflow";
 
 type TT = Dict & Content;
 const T = createContext<TT>({ ...LANGS["ru"]!.d, ...CONTENT["ru"]! });
@@ -317,6 +318,7 @@ function Index() {
         </section>
       ))}
 
+      <Reveal><Workflow lang={lang} /></Reveal>
       <Pricing />
       <Compare />
       <Faq />
