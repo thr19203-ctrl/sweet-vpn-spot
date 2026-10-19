@@ -42,7 +42,6 @@ export function Workflow({ lang }: { lang: string }) {
           </div>
         )}
       </div>
-      <p className="mt-5 text-center text-sm text-muted-foreground">{copy.play}</p>
     </section>
   );
 }
