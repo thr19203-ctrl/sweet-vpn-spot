@@ -8,7 +8,7 @@ import posterAsset from "@/assets/videos/cfg-workflow-poster.jpg.asset.json";
 export function Workflow({ lang }: { lang: string }) {
   const video = useRef<HTMLVideoElement>(null);
   const [started, setStarted] = useState(false);
-  const copy = WORKFLOW[lang] ?? WORKFLOW.en;
+  const copy = WORKFLOW[lang] ?? WORKFLOW["en"];
   if (!copy) return null;
 
   const play = async () => {
