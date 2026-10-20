@@ -292,7 +292,7 @@ function Index() {
             <Btn href={DISCORD} light>{t.join}</Btn>
             <Btn href="#Тарифы">{t.plans}</Btn>
           </div>
-          <p className="mt-5 text-xs text-muted-foreground">{t.terms} <a href={DISCORD} className="underline">{t.termsLink}</a>.</p>
+          <p className="mt-5 text-xs text-muted-foreground">{t.terms} <a href="/terms" className="underline">{t.termsLink}</a>.</p>
           <div className="mx-auto mt-14 max-w-5xl animate-in fade-in zoom-in-95 duration-1000"><img src={laptop} alt="Cfg VPN" width={1600} height={1008} className="animate-float w-full [mask-image:radial-gradient(ellipse_at_center,black_55%,transparent_75%)]" /></div>
         </section>
       </div>
