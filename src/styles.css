@@ -185,32 +185,3 @@ section:nth-of-type(even) .vpn-visual-image { animation-delay: -4s; animation-du
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition-duration: 0.01ms !important; }
 }
-
-/* Reference presentation: monochrome, spacious, full-bleed. */
-:root {
-  --background: oklch(0.145 0 0);
-  --card: oklch(0.18 0 0);
-  --muted-foreground: oklch(0.73 0 0);
-  --shadow-reference: 0 16px 48px color-mix(in oklab, var(--background) 65%, transparent);
-}
-body { letter-spacing: 0; }
-.reference-header { padding: 16px 20px; }
-.reference-header > div > a svg { width: 30px; height: 30px; }
-.reference-wave { opacity: .38; object-position: center; }
-.reference-hero { min-height: calc(90svh - 72px); padding-top: 54px; padding-bottom: 40px; }
-.reference-title { max-width: 720px; margin: 0 auto; font-size: 44px; line-height: 1.08; font-weight: 600; text-wrap: balance; letter-spacing: 0; }
-.reference-description { max-width: 580px; margin-top: 28px; font-size: 16px; line-height: 1.65; text-wrap: pretty; }
-.reference-actions { max-width: 440px; margin-top: 42px; }
-.hero-button { height: auto; min-height: 46px; padding: 12px 20px; border-radius: 18px; font-size: 16px; white-space: normal; line-height: 1.4; box-shadow: none; }
-.reference-terms { margin-top: 25px; max-width: 600px; font-size: 13px; line-height: 1.6; }
-.reference-product { margin-top: -8px; position: relative; }
-.pricing-card:hover { box-shadow: var(--shadow-reference); border-color: var(--ring); }
-@media (min-width: 640px) {
-  .reference-header { padding: 22px 24px; }
-  .reference-hero { min-height: 660px; padding-top: 96px; padding-bottom: 70px; }
-  .reference-title { font-size: 72px; }
-  .reference-description { font-size: 20px; margin-top: 30px; }
-  .reference-actions { max-width: 600px; margin-top: 40px; }
-  .hero-button { min-width: 200px; min-height: 50px; }
-  .reference-terms { font-size: 14px; }
-}

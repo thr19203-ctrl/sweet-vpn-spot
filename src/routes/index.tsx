@@ -1,8 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Fragment, createContext, useContext, useEffect, useRef, useState } from "react";
-import wave from "@/assets/reference-wave.jpg";
-import { Menu, X, ChevronDown } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import wave from "@/assets/wave.jpg";
 import laptop from "@/assets/laptop.jpg";
 import { LANGS, type Dict } from "@/lib/i18n";
 import { CONTENT, type Content } from "@/lib/i18n-content";
@@ -14,7 +12,7 @@ import { PLANS, formatPrice, planPrice } from "@/lib/pricing";
 import { Workflow } from "@/components/workflow";
 
 type TT = Dict & Content;
-const T = createContext<TT>({ ...LANGS["ru"]?.d, ...CONTENT["ru"] } as TT);
+const T = createContext<TT>({ ...LANGS["ru"]!.d, ...CONTENT["ru"]! });
 const useT = () => useContext(T);
 
 function Reveal({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
@@ -55,9 +53,16 @@ function Logo() {
 }
 
 const Btn = ({ href, children, light }: { href: string; children: React.ReactNode; light?: boolean }) => (
-  <Button asChild variant={light ? "default" : "secondary"} className="hero-button">
-    <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel="noreferrer">{children}</a>
-  </Button>
+  <a
+    href={href}
+    target={href.startsWith("http") ? "_blank" : undefined}
+    rel="noreferrer"
+    className={`inline-flex items-center gap-1.5 rounded-xl px-5 py-3 text-[15px] font-medium transition-colors ${
+      light ? "bg-primary text-primary-foreground hover:bg-primary/85" : "bg-secondary text-secondary-foreground hover:bg-accent"
+    }`}
+  >
+    {children}
+  </a>
 );
 
 function DiscordLogo({ className = "" }: { className?: string }) {
@@ -95,32 +100,23 @@ function Cursor() {
 
 function Nav() {
   const t = useT();
-  const [open, setOpen] = useState(false);
   const ids = ["Продукт", "Протоколы", "Скачать", "Тарифы", "Сообщество"];
-  useEffect(() => {
-    if (!open) return;
-    const close = (event: KeyboardEvent) => { if (event.key === "Escape") setOpen(false); };
-    window.addEventListener("keydown", close);
-    return () => window.removeEventListener("keydown", close);
-  }, [open]);
   return (
-    <header className="reference-header relative z-20 mx-auto max-w-6xl">
-      <div className="flex items-center justify-between">
-        <a href="/" aria-label="Cfg" className="text-foreground"><Logo /></a>
-        <nav className="hidden items-center gap-7 text-sm font-medium md:flex">
-          {ids.map((id, k) => <a key={id} href={id === "Сообщество" ? DISCORD : `#${id}`} className="flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground">{t.nav[k]}<ChevronDown size={12} /></a>)}
+    <header className="relative z-20 mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
+      <div className="flex items-center gap-10">
+        <a href="/" className="text-foreground"><Logo /></a>
+        <nav className="hidden gap-8 text-sm font-medium md:flex">
+          {ids.map((i, k) => (
+            <a key={i} href={i === "Сообщество" ? DISCORD : `#${i}`} className="text-foreground/90 transition-colors hover:text-foreground">
+              {t.nav[k]} <span className="text-muted-foreground">⌄</span>
+            </a>
+          ))}
         </nav>
-        <div className="hidden items-center gap-2 md:flex">
-          <Button asChild variant="ghost"><a href={DISCORD} target="_blank" rel="noreferrer">{t.login}</a></Button>
-          <Button asChild><a href={DISCORD} target="_blank" rel="noreferrer">{t.get} ↗</a></Button>
-        </div>
-        <Button variant="ghost" size="icon" className="h-10 w-10 md:hidden [&_svg]:size-6" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="mobile-navigation" onClick={() => setOpen(!open)}>
-          {open ? <X /> : <Menu />}
-        </Button>
       </div>
-      {open && <nav id="mobile-navigation" className="absolute inset-x-5 top-full flex flex-col border border-border bg-background p-3 shadow-lg md:hidden">
-        {ids.map((id, k) => <Button asChild key={id} variant="ghost" className="justify-start"><a href={id === "Сообщество" ? DISCORD : `#${id}`} onClick={() => setOpen(false)}>{t.nav[k]}</a></Button>)}
-      </nav>}
+      <div className="flex items-center gap-2">
+        <a href={DISCORD} target="_blank" rel="noreferrer" className="hidden rounded-xl bg-secondary px-4 py-2 text-sm font-semibold sm:inline-block">{t.login} ⌄</a>
+        <a href={DISCORD} target="_blank" rel="noreferrer" className="rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-transform hover:scale-105">{t.get} ↗</a>
+      </div>
     </header>
   );
 }
@@ -134,7 +130,7 @@ const feats = (t: TT) => [
 
 function Visual({ src, alt }: { src: string; alt: string }) {
   return (
-    <div className="vpn-visual group relative overflow-hidden rounded-lg bg-card">
+    <div className="vpn-visual group relative overflow-hidden rounded-2xl bg-card">
       <img src={src} alt={alt} width={1024} height={768} loading="lazy" className="vpn-visual-image aspect-[4/3] w-full object-cover" />
     </div>
   );
@@ -156,9 +152,9 @@ function Pricing() {
         <h2 className="mt-3 text-4xl font-semibold tracking-tight sm:text-6xl">{t.pricing}</h2>
         <div className="mx-auto mt-8 inline-flex rounded-xl border border-border bg-secondary p-1 text-sm font-medium">
           {[false, true].map((y) => (
-            <Button variant="ghost" key={String(y)} onClick={() => setYear(y)} className={`rounded-lg px-5 py-2 transition-all duration-300 ${year === y ? "bg-primary text-primary-foreground shadow" : "text-muted-foreground hover:text-foreground"}`}>
+            <button key={String(y)} onClick={() => setYear(y)} className={`rounded-lg px-5 py-2 transition-all duration-300 ${year === y ? "bg-primary text-primary-foreground shadow" : "text-muted-foreground hover:text-foreground"}`}>
               {y ? t.yearly : t.monthly}{y && <span className={`ml-2 rounded-md px-1.5 py-0.5 text-[11px] ${year ? "bg-background/15" : "bg-online/20 text-online"}`}>-20%</span>}
-            </Button>
+            </button>
           ))}
         </div>
       </Reveal>
@@ -167,7 +163,7 @@ function Pricing() {
            const price = planPrice(p.m, year);
           return (
             <Reveal key={p.n} delay={i * 120}>
-              <div data-plan={p.n} className={`pricing-card group relative flex h-full flex-col rounded-lg border p-7 transition-all duration-500 hover:-translate-y-2 hover:shadow-neon ${p.hot ? "pricing-card-pro border-primary bg-primary text-primary-foreground" : "border-border bg-card"}`}>
+              <div data-plan={p.n} className={`pricing-card group relative flex h-full flex-col rounded-2xl border p-7 transition-all duration-500 hover:-translate-y-2 hover:shadow-neon ${p.hot ? "pricing-card-pro border-primary bg-primary text-primary-foreground" : "border-border bg-card"}`}>
                 <div className="flex items-center justify-between">
                   <div className="text-xl font-semibold">{p.n}</div>
                   {p.hot && <span className="rounded-full bg-primary-foreground px-3 py-1 text-[11px] font-bold tracking-wider text-primary">{t.popular}</span>}
@@ -247,7 +243,7 @@ function Faq() {
       <h2 className="text-center text-4xl font-semibold tracking-tight sm:text-5xl">{t.faq}</h2>
       <div className="mt-10 space-y-3">
         {[[t.q1, t.a1], [t.q2, t.a2], [t.q3, t.a3], [t.q4, t.a4]].map(([q, a]) => (
-          <details key={q} className="group rounded-lg border border-border bg-card px-5 py-4 transition-colors hover:border-neon/40">
+          <details key={q} className="group rounded-2xl border border-border bg-card px-5 py-4 transition-colors hover:border-neon/40">
             <summary className="flex cursor-pointer list-none items-center justify-between font-medium">
               {q}<span className="text-muted-foreground transition-transform group-open:rotate-45">+</span>
             </summary>
@@ -280,25 +276,26 @@ function Index() {
   useEffect(() => { const l = localStorage.getItem("lang"); if (l && LANGS[l]) setLangState(l); }, []);
   useEffect(() => { document.documentElement.lang = lang; document.documentElement.dir = LANGS[lang]?.rtl ? "rtl" : "ltr"; }, [lang]);
   const setLang = (l: string) => { setLangState(l); localStorage.setItem("lang", l); };
-  const t = { ...(LANGS[lang] ?? LANGS["ru"])?.d, ...(CONTENT[lang] ?? CONTENT["ru"]) } as TT;
+  const t: TT = { ...(LANGS[lang] ?? LANGS["ru"]!).d, ...(CONTENT[lang] ?? CONTENT["ru"]!) };
   return (
     <T.Provider value={t}>
     <div className="min-h-screen overflow-x-hidden bg-background">
       <Cursor />
-      <div className="reference-intro relative overflow-hidden">
-        <img src={wave} alt="" width={1264} height={848} className="reference-wave pointer-events-none absolute inset-0 h-full w-full object-cover" />
+      <div className="relative overflow-hidden">
+        <img src={wave} alt="" width={1920} height={1088} className="pointer-events-none absolute inset-x-0 top-0 h-[900px] w-full object-cover opacity-80" />
+        <div className="absolute inset-x-0 top-[600px] h-[300px] bg-gradient-to-b from-transparent to-background" />
         <Nav />
-        <section className="reference-hero relative z-10 px-5 text-center">
-          <h1 key={lang} className="reference-title animate-in fade-in slide-in-from-bottom-4 duration-700">{t.h1}</h1>
-          <p className="reference-description mx-auto text-muted-foreground">{t.sub}</p>
-          <div className="reference-actions mx-auto flex flex-col gap-2.5 sm:flex-row sm:justify-center">
+        <section className="relative z-10 px-5 pt-16 text-center sm:pt-24">
+          <h1 key={lang} className="animate-in fade-in slide-in-from-bottom-4 text-5xl font-semibold tracking-tight duration-700 sm:text-7xl">{t.h1}</h1>
+          <p className="mx-auto mt-5 max-w-xl animate-in fade-in text-base text-foreground/80 duration-1000 sm:text-lg">{t.sub}</p>
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Btn href={DISCORD} light>{t.join}</Btn>
             <Btn href="#Тарифы">{t.plans}</Btn>
           </div>
-          <p className="reference-terms mx-auto text-muted-foreground">{t.terms} <a href={DISCORD} className="underline underline-offset-4">{t.termsLink}</a>.</p>
+          <p className="mt-5 text-xs text-muted-foreground">{t.terms} <a href={DISCORD} className="underline">{t.termsLink}</a>.</p>
+          <div className="mx-auto mt-14 max-w-5xl animate-in fade-in zoom-in-95 duration-1000"><img src={laptop} alt="Cfg VPN" width={1600} height={1008} className="animate-float w-full [mask-image:radial-gradient(ellipse_at_center,black_55%,transparent_75%)]" /></div>
         </section>
       </div>
-      <div className="reference-product mx-auto max-w-5xl px-5 pb-12"><img src={laptop} alt="Cfg VPN" width={1600} height={1008} className="animate-float w-full [mask-image:radial-gradient(ellipse_at_center,black_55%,transparent_75%)]" /></div>
 
       <section className="relative z-10 border-y border-border bg-background px-5 py-14 text-center">
         <div className="mx-auto grid max-w-4xl grid-cols-2 gap-8 sm:grid-cols-4">
@@ -328,11 +325,11 @@ function Index() {
 
       <section className="px-5 py-24">
         <Reveal>
-          <div className="discord-join relative mx-auto max-w-4xl px-6 py-16 text-center text-foreground">
+          <div className="discord-join relative mx-auto max-w-4xl overflow-hidden rounded-[2rem] bg-discord px-6 py-16 text-center text-discord-foreground shadow-discord">
             <DiscordLogo className="animate-float mx-auto h-20 w-20 sm:h-24 sm:w-24" />
             <h2 className="relative mt-6 text-4xl font-bold tracking-tight sm:text-6xl">{t.community}</h2>
-            <p className="relative mx-auto mt-4 max-w-md text-base font-medium text-muted-foreground sm:text-lg">{t.communityDesc}</p>
-            <a href={DISCORD} target="_blank" rel="noreferrer" className="discord-join-link relative mt-8 inline-flex items-center gap-2 rounded-xl bg-primary px-7 py-3.5 text-[15px] font-semibold text-primary-foreground transition-transform duration-300 hover:scale-105">
+            <p className="relative mx-auto mt-4 max-w-md text-base font-medium text-discord-foreground/90 sm:text-lg">{t.communityDesc}</p>
+            <a href={DISCORD} target="_blank" rel="noreferrer" className="discord-join-link relative mt-8 inline-flex items-center gap-2 rounded-xl bg-discord-foreground px-7 py-3.5 text-[15px] font-semibold text-discord transition-transform duration-300 hover:scale-105">
               <DiscordLogo className="h-5 w-5" />{t.open}
             </a>
           </div>
@@ -352,8 +349,8 @@ function Index() {
         <div className="fixed inset-x-0 bottom-0 z-50 flex flex-col gap-4 border-t border-border bg-card/95 p-5 backdrop-blur sm:flex-row sm:items-center sm:justify-between">
           <div><div className="font-medium">{t.cookieT}</div><p className="text-sm text-muted-foreground">{t.cookieD}</p></div>
           <div className="flex gap-2">
-            <Button variant="secondary" onClick={() => setCookie(false)} className="rounded-full px-4 py-2 text-sm">{t.necessary}</Button>
-            <Button variant="secondary" onClick={() => setCookie(false)} className="rounded-full px-4 py-2 text-sm">{t.acceptAll}</Button>
+            <button onClick={() => setCookie(false)} className="rounded-full bg-accent px-4 py-2 text-sm">{t.necessary}</button>
+            <button onClick={() => setCookie(false)} className="rounded-full bg-accent px-4 py-2 text-sm">{t.acceptAll}</button>
           </div>
         </div>
       )}
