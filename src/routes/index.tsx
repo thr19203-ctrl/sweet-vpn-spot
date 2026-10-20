@@ -340,7 +340,7 @@ function Index() {
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 text-sm text-muted-foreground sm:flex-row">
           <div className="flex items-center gap-2 text-foreground"><Logo /> Cfg</div>
           <span>© 2026 Cfg. {t.rights}</span>
-          <a href={DISCORD} target="_blank" rel="noreferrer" className="hover:text-foreground">Discord</a>
+          <div className="flex gap-5"><a href="/terms" className="hover:text-foreground">Terms of Use</a><a href={DISCORD} target="_blank" rel="noreferrer" className="hover:text-foreground">Discord</a></div>
         </div>
         <LangSwitcher lang={lang} setLang={setLang} />
       </footer>
