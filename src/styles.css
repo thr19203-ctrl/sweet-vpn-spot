@@ -164,8 +164,6 @@
 @keyframes float { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-12px) } }
 @utility animate-float { animation: float 6s ease-in-out infinite; }
 html { scroll-behavior: smooth; }
-:root { --discord: oklch(0.58 0.2 277); --discord-foreground: oklch(1 0 0); --shadow-discord: 0 30px 80px -20px color-mix(in oklab, var(--discord) 70%, transparent); }
-@theme inline { --color-discord: var(--discord); --color-discord-foreground: var(--discord-foreground); --shadow-discord: var(--shadow-discord); }
 html.has-cursor, html.has-cursor * { cursor: none !important; }
 
 @keyframes visual-drift {
@@ -178,8 +176,7 @@ html.has-cursor, html.has-cursor * { cursor: none !important; }
 }
 .vpn-visual-image { animation: visual-drift 10s ease-in-out infinite; }
 section:nth-of-type(even) .vpn-visual-image { animation-delay: -4s; animation-duration: 12s; }
-.discord-join { animation: join-drift 9s ease-in-out infinite; }
-.discord-join-link { animation: join-drift 6s ease-in-out infinite; }
+.support-cta { animation: join-drift 9s ease-in-out infinite; }
 .pricing-card-pro { --primary: oklch(1 0 0); --primary-foreground: oklch(0.145 0 0); }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

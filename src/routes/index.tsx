@@ -7,12 +7,13 @@ import { CONTENT, type Content } from "@/lib/i18n-content";
 import f1 from "@/assets/server-premium.jpg";
 import f2 from "@/assets/globe-premium.jpg";
 import f3 from "@/assets/devices-premium.jpg";
-import f4 from "@/assets/f4.jpg";
+import { Headphones } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { PLANS, formatPrice, planPrice } from "@/lib/pricing";
 import { Workflow } from "@/components/workflow";
 
 type TT = Dict & Content;
-const T = createContext<TT>({ ...LANGS["ru"]!.d, ...CONTENT["ru"]! });
+const T = createContext<TT>({ ...(LANGS["ru"] ?? LANGS["en"])?.d, ...CONTENT["ru"] });
 const useT = () => useContext(T);
 
 function Reveal({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
@@ -26,9 +27,9 @@ function Reveal({ children, className = "", delay = 0 }: { children: React.React
   return <div ref={ref} style={{ transitionDelay: `${delay}ms` }} className={`transition-all duration-700 ease-out ${on ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"} ${className}`}>{children}</div>;
 }
 
-const DISCORD = "https://discord.gg/6DsXVJkEJw";
+const PRICING = "#Тарифы";
 const TITLE = "Cfg — Рабочие VPN конфиги";
-const DESC = "Свежие VPN конфиги VLESS, WireGuard, Shadowsocks и Outline. Обход блокировок за секунды. Присоединяйся к нашему Discord.";
+const DESC = "Свежие VPN конфиги VLESS, WireGuard, Shadowsocks и Outline. Обход блокировок за секунды. Выбери тариф и узнай, как настроить подключение.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -53,25 +54,10 @@ function Logo() {
 }
 
 const Btn = ({ href, children, light }: { href: string; children: React.ReactNode; light?: boolean }) => (
-  <a
-    href={href}
-    target={href.startsWith("http") ? "_blank" : undefined}
-    rel="noreferrer"
-    className={`inline-flex items-center gap-1.5 rounded-xl px-5 py-3 text-[15px] font-medium transition-colors ${
-      light ? "bg-primary text-primary-foreground hover:bg-primary/85" : "bg-secondary text-secondary-foreground hover:bg-accent"
-    }`}
-  >
-    {children}
-  </a>
+  <Button asChild variant={light ? "default" : "secondary"} className="h-auto rounded-xl px-5 py-3 text-[15px]">
+    <a href={href}>{children}</a>
+  </Button>
 );
-
-function DiscordLogo({ className = "" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-label="Discord" role="img">
-      <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z" />
-    </svg>
-  );
-}
 
 function Cursor() {
   const dot = useRef<HTMLDivElement>(null);
@@ -100,22 +86,22 @@ function Cursor() {
 
 function Nav() {
   const t = useT();
-  const ids = ["Продукт", "Протоколы", "Скачать", "Тарифы", "Сообщество"];
+  const ids = ["Продукт", "Протоколы", "Скачать", "Тарифы", "Поддержка"];
   return (
     <header className="relative z-20 mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
       <div className="flex items-center gap-10">
         <a href="/" className="text-foreground"><Logo /></a>
         <nav className="hidden gap-8 text-sm font-medium md:flex">
           {ids.map((i, k) => (
-            <a key={i} href={i === "Сообщество" ? DISCORD : `#${i}`} className="text-foreground/90 transition-colors hover:text-foreground">
+            <a key={i} href={`#${i}`} className="text-foreground/90 transition-colors hover:text-foreground">
               {t.nav[k]} <span className="text-muted-foreground">⌄</span>
             </a>
           ))}
         </nav>
       </div>
       <div className="flex items-center gap-2">
-        <a href={DISCORD} target="_blank" rel="noreferrer" className="hidden rounded-xl bg-secondary px-4 py-2 text-sm font-semibold sm:inline-block">{t.login} ⌄</a>
-        <a href={DISCORD} target="_blank" rel="noreferrer" className="rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-transform hover:scale-105">{t.get} ↗</a>
+        
+        <Button asChild className="rounded-xl font-semibold transition-transform hover:scale-105"><a href={PRICING}>{t.get} ↗</a></Button>
       </div>
     </header>
   );
@@ -125,7 +111,7 @@ const feats = (t: TT) => [
   { id: "Продукт", t: t.f1t, d: t.f1d, img: f1, tags: t.f1tags.split("|") },
   { id: "Протоколы", t: t.f2t, d: t.f2d, img: f2, tags: ["VLESS Reality", "WireGuard", "Shadowsocks", "Hysteria2"] },
   { id: "Скачать", t: t.f3t, d: t.f3d, img: f3, tags: ["Android", "iOS", "Windows", "macOS"] },
-  { id: "Discord", t: t.f4t, d: t.f4d, img: f4, tags: ["#free-configs", "#premium", "#support", "24/7"] },
+  { id: "Поддержка", t: t.f4t, d: t.f4d, img: f1, tags: [t.s4, t.autoCheck, "24/7", t.allProto] },
 ];
 
 function Visual({ src, alt }: { src: string; alt: string }) {
@@ -137,7 +123,7 @@ function Visual({ src, alt }: { src: string; alt: string }) {
 }
 
 const mkPlans = (t: TT) => [
-  { n: PLANS[0].name, m: PLANS[0].monthly, d: t.pd1, f: ["VLESS, Shadowsocks", `5 ${t.s3}`, "50 Mbps", t.comm] },
+  { n: PLANS[0].name, m: PLANS[0].monthly, d: t.pd1, f: ["VLESS, Shadowsocks", `5 ${t.s3}`, "50 Mbps", t.s4] },
   { n: PLANS[1].name, m: PLANS[1].monthly, d: t.pd2, f: [t.allProto, `40+ ${t.s3}`, "1 Gbps", `${t.s4} 24/7`, t.autoCheck] },
   { n: PLANS[2].name, m: PLANS[2].monthly, d: t.pd3, f: [t.allPro.replace(/Pro/g, "Plus"), `5 ${t.devices}`, t.dedIp, `${t.s4} 24/7`], hot: true },
 ];
@@ -152,9 +138,9 @@ function Pricing() {
         <h2 className="mt-3 text-4xl font-semibold tracking-tight sm:text-6xl">{t.pricing}</h2>
         <div className="mx-auto mt-8 inline-flex rounded-xl border border-border bg-secondary p-1 text-sm font-medium">
           {[false, true].map((y) => (
-            <button key={String(y)} onClick={() => setYear(y)} className={`rounded-lg px-5 py-2 transition-all duration-300 ${year === y ? "bg-primary text-primary-foreground shadow" : "text-muted-foreground hover:text-foreground"}`}>
+            <Button variant="ghost" key={String(y)} aria-pressed={year === y} onClick={() => setYear(y)} className={`rounded-lg px-5 py-2 transition-all duration-300 ${year === y ? "bg-primary text-primary-foreground shadow" : "text-muted-foreground hover:text-foreground"}`}>
               {y ? t.yearly : t.monthly}{y && <span className={`ml-2 rounded-md px-1.5 py-0.5 text-[11px] ${year ? "bg-background/15" : "bg-online/20 text-online"}`}>-20%</span>}
-            </button>
+            </Button>
           ))}
         </div>
       </Reveal>
@@ -173,7 +159,7 @@ function Pricing() {
                   <span key={price} className="animate-in fade-in slide-in-from-bottom-2 whitespace-nowrap text-5xl font-semibold duration-300">{formatPrice(price)}</span>
                   <span className={`mb-1.5 text-sm ${p.hot ? "text-primary-foreground/70" : "text-muted-foreground"}`}>{t.perMonth}</span>
                 </div>
-                <a href={DISCORD} target="_blank" rel="noreferrer" className={`mt-6 block rounded-xl py-3 text-center text-sm font-semibold transition-all duration-300 ${p.hot ? "bg-primary-foreground text-primary hover:opacity-90" : "bg-secondary group-hover:bg-primary group-hover:text-primary-foreground"}`}>{t.buy}</a>
+                <Button asChild variant="secondary" className={`mt-6 h-auto rounded-xl py-3 font-semibold ${p.hot ? "bg-primary-foreground text-primary hover:bg-primary-foreground/90" : "group-hover:bg-primary group-hover:text-primary-foreground"}`}><a href="#workflow">{t.buy}</a></Button>
                 <div className={`my-6 h-px ${p.hot ? "bg-primary-foreground/15" : "bg-border"}`} />
                 <ul className="space-y-3 text-sm">{p.f.map((x) => <li key={x} className="flex items-center gap-3"><span className={`inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] ${p.hot ? "bg-primary-foreground/10" : "bg-accent"}`}>✓</span>{x}</li>)}</ul>
               </div>
@@ -255,7 +241,7 @@ function Faq() {
   );
 }
 
-const langs = ["English", "Русский", "Español", "Deutsch", "Français", "Português", "Italiano", "Türkçe", "Polski", "Українська", "Қазақша", "O'zbekcha", "العربية", "हिन्दी", "Bahasa Indonesia", "Tiếng Việt", "ไทย", "日本語", "한국어", "中文"];
+const unusedLangs = ["English", "Русский", "Español", "Deutsch", "Français", "Português", "Italiano", "Türkçe", "Polski", "Українська", "Қазақша", "O'zbekcha", "العربية", "हिन्दी", "Bahasa Indonesia", "Tiếng Việt", "ไทย", "日本語", "한국어", "中文"];
 
 function LangSwitcher({ lang, setLang }: { lang: string; setLang: (l: string) => void }) {
   return (
@@ -276,7 +262,7 @@ function Index() {
   useEffect(() => { const l = localStorage.getItem("lang"); if (l && LANGS[l]) setLangState(l); }, []);
   useEffect(() => { document.documentElement.lang = lang; document.documentElement.dir = LANGS[lang]?.rtl ? "rtl" : "ltr"; }, [lang]);
   const setLang = (l: string) => { setLangState(l); localStorage.setItem("lang", l); };
-  const t: TT = { ...(LANGS[lang] ?? LANGS["ru"]!).d, ...(CONTENT[lang] ?? CONTENT["ru"]!) };
+  const t: TT = { ...(LANGS[lang] ?? LANGS["ru"]).d, ...(CONTENT[lang] ?? CONTENT["ru"]) };
   return (
     <T.Provider value={t}>
     <div className="min-h-screen overflow-x-hidden bg-background">
@@ -289,7 +275,7 @@ function Index() {
           <h1 key={lang} className="animate-in fade-in slide-in-from-bottom-4 text-5xl font-semibold tracking-tight duration-700 sm:text-7xl">{t.h1}</h1>
           <p className="mx-auto mt-5 max-w-xl animate-in fade-in text-base text-foreground/80 duration-1000 sm:text-lg">{t.sub}</p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Btn href={DISCORD} light>{t.join}</Btn>
+            <Btn href={PRICING} light>{t.getConfig}</Btn>
             <Btn href="#Тарифы">{t.plans}</Btn>
           </div>
           <p className="mt-5 text-xs text-muted-foreground">{t.terms} <a href="/terms" className="underline">{t.termsLink}</a>.</p>
@@ -325,13 +311,11 @@ function Index() {
 
       <section className="px-5 py-24">
         <Reveal>
-          <div className="discord-join relative mx-auto max-w-4xl overflow-hidden rounded-[2rem] bg-discord px-6 py-16 text-center text-discord-foreground shadow-discord">
-            <DiscordLogo className="animate-float mx-auto h-20 w-20 sm:h-24 sm:w-24" />
-            <h2 className="relative mt-6 text-4xl font-bold tracking-tight sm:text-6xl">{t.community}</h2>
-            <p className="relative mx-auto mt-4 max-w-md text-base font-medium text-discord-foreground/90 sm:text-lg">{t.communityDesc}</p>
-            <a href={DISCORD} target="_blank" rel="noreferrer" className="discord-join-link relative mt-8 inline-flex items-center gap-2 rounded-xl bg-discord-foreground px-7 py-3.5 text-[15px] font-semibold text-discord transition-transform duration-300 hover:scale-105">
-              <DiscordLogo className="h-5 w-5" />{t.open}
-            </a>
+          <div className="support-cta relative mx-auto max-w-4xl px-6 py-16 text-center text-foreground">
+            <Headphones aria-hidden="true" className="animate-float mx-auto h-20 w-20 sm:h-24 sm:w-24" />
+            <h2 className="relative mt-6 text-4xl font-bold tracking-tight sm:text-6xl">{t.supportT}</h2>
+            <p className="relative mx-auto mt-4 max-w-md text-base font-medium text-muted-foreground sm:text-lg">{t.supportD}</p>
+            <Btn href={PRICING} light>{t.getConfig}</Btn>
           </div>
         </Reveal>
       </section>
@@ -340,7 +324,7 @@ function Index() {
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 text-sm text-muted-foreground sm:flex-row">
           <div className="flex items-center gap-2 text-foreground"><Logo /> Cfg</div>
           <span>© 2026 Cfg. {t.rights}</span>
-          <div className="flex gap-5"><a href="/terms" className="hover:text-foreground">Terms of Use</a><a href={DISCORD} target="_blank" rel="noreferrer" className="hover:text-foreground">Discord</a></div>
+          <div className="flex gap-5"><a href="/terms" className="hover:text-foreground">{t.termsLink}</a><a href="#Поддержка" className="hover:text-foreground">{t.nav[4]}</a></div>
         </div>
         <LangSwitcher lang={lang} setLang={setLang} />
       </footer>
@@ -349,8 +333,8 @@ function Index() {
         <div className="fixed inset-x-0 bottom-0 z-50 flex flex-col gap-4 border-t border-border bg-card/95 p-5 backdrop-blur sm:flex-row sm:items-center sm:justify-between">
           <div><div className="font-medium">{t.cookieT}</div><p className="text-sm text-muted-foreground">{t.cookieD}</p></div>
           <div className="flex gap-2">
-            <button onClick={() => setCookie(false)} className="rounded-full bg-accent px-4 py-2 text-sm">{t.necessary}</button>
-            <button onClick={() => setCookie(false)} className="rounded-full bg-accent px-4 py-2 text-sm">{t.acceptAll}</button>
+            <Button variant="secondary" onClick={() => setCookie(false)} className="rounded-full">{t.necessary}</Button>
+            <Button variant="secondary" onClick={() => setCookie(false)} className="rounded-full">{t.acceptAll}</Button>
           </div>
         </div>
       )}
