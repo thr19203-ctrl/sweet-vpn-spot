@@ -13,8 +13,12 @@ import { PLANS, formatPrice, planPrice } from "@/lib/pricing";
 import { Workflow } from "@/components/workflow";
 
 type TT = Dict & Content;
-const T = createContext<TT>({ ...(LANGS["ru"] ?? LANGS["en"])?.d, ...CONTENT["ru"] });
-const useT = () => useContext(T);
+const T = createContext<TT | null>(null);
+const useT = () => {
+  const value = useContext(T);
+  if (!value) throw new Error("Cfg translations are unavailable");
+  return value;
+};
 
 function Reveal({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -241,8 +245,6 @@ function Faq() {
   );
 }
 
-const unusedLangs = ["English", "Русский", "Español", "Deutsch", "Français", "Português", "Italiano", "Türkçe", "Polski", "Українська", "Қазақша", "O'zbekcha", "العربية", "हिन्दी", "Bahasa Indonesia", "Tiếng Việt", "ไทย", "日本語", "한국어", "中文"];
-
 function LangSwitcher({ lang, setLang }: { lang: string; setLang: (l: string) => void }) {
   return (
     <div className="mx-auto mt-8 flex max-w-6xl justify-center sm:justify-end">
@@ -262,7 +264,10 @@ function Index() {
   useEffect(() => { const l = localStorage.getItem("lang"); if (l && LANGS[l]) setLangState(l); }, []);
   useEffect(() => { document.documentElement.lang = lang; document.documentElement.dir = LANGS[lang]?.rtl ? "rtl" : "ltr"; }, [lang]);
   const setLang = (l: string) => { setLangState(l); localStorage.setItem("lang", l); };
-  const t: TT = { ...(LANGS[lang] ?? LANGS["ru"]).d, ...(CONTENT[lang] ?? CONTENT["ru"]) };
+  const dictionary = LANGS[lang] ?? LANGS["ru"];
+  const content = CONTENT[lang] ?? CONTENT["ru"];
+  if (!dictionary || !content) return null;
+  const t: TT = { ...dictionary.d, ...content };
   return (
     <T.Provider value={t}>
     <div className="min-h-screen overflow-x-hidden bg-background">
