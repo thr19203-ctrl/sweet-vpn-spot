@@ -1,4 +1,6 @@
 # Final presentation updates
+- [x] Finish removing Discord, update FAQ and link Get config/Get to pricing.
+- [x] Verify the page opens, navigation works and Terms contain no Discord references.
 - [x] Replace three VPN illustrations and add subtle continuous motion.
 - [x] Set Free / Plus / Pro USD prices and make Pro white.
 - [x] Remove the 50,000-user trust claim and gently animate Discord join.
