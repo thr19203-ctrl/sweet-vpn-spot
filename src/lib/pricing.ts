@@ -1,5 +1,4 @@
 export const PLANS = [
-  { name: "Free", monthly: 0 },
   { name: "Plus", monthly: 2.99 },
   { name: "Pro", monthly: 9.99 },
 ] as const;

@@ -10,5 +10,7 @@
 <!-- LOVABLE:END -->
 
 - Keep plan identities, base prices, and price formatting in `src/lib/pricing.ts` so the UI and concrete pricing tests share one source of truth.
-- Use global CSS motion classes for VPN visuals and the support call-to-action, respecting reduced-motion preferences so animations remain accessible.
+- Use global CSS motion classes for VPN visuals, respecting reduced-motion preferences so animations remain accessible.
 - Keep the uploaded workflow video in a dedicated presentation component with CDN asset pointers and localized copy so it does not add binary media or player state to the page module.
+
+- Keep the homepage limited to the header, hero, benefits and pricing, with the existing language selector after pricing; this preserves the requested minimal presentation.
