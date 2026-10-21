@@ -9,6 +9,8 @@ import f2 from "@/assets/globe-premium.jpg";
 import f3 from "@/assets/devices-premium.jpg";
 import { Button } from "@/components/ui/button";
 import { PLANS, formatPrice, planPrice } from "@/lib/pricing";
+import { Workflow } from "@/components/workflow";
+import { Headphones } from "lucide-react";
 
 type TT = Dict & Content;
 const T = createContext<TT | null>(null);
@@ -200,7 +202,18 @@ function Index() {
         </section>
       ))}
 
+      <Reveal><Workflow lang={lang} /></Reveal>
       <Pricing />
+      <section id="Поддержка" className="px-5 py-24">
+        <Reveal>
+          <div className="support-cta relative mx-auto max-w-4xl px-6 py-16 text-center text-foreground">
+            <Headphones aria-hidden="true" className="animate-float mx-auto h-20 w-20 sm:h-24 sm:w-24" />
+            <h2 className="relative mt-6 text-4xl font-bold sm:text-6xl">{t.supportT}</h2>
+            <p className="relative mx-auto mb-6 mt-4 max-w-md text-base font-medium text-muted-foreground sm:text-lg">{t.supportD}</p>
+            <Btn href={PRICING} light>{t.getConfig}</Btn>
+          </div>
+        </Reveal>
+      </section>
       <div className="px-5 pb-8"><LangSwitcher lang={lang} setLang={setLang} /></div>
     </div>
     </T.Provider>

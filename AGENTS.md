@@ -13,4 +13,4 @@
 - Use global CSS motion classes for VPN visuals, respecting reduced-motion preferences so animations remain accessible.
 - Keep the uploaded workflow video in a dedicated presentation component with CDN asset pointers and localized copy so it does not add binary media or player state to the page module.
 
-- Keep the homepage limited to the header, hero, benefits and pricing, with the existing language selector after pricing; this preserves the requested minimal presentation.
+- Keep the homepage limited to the header, hero, benefits, dedicated workflow presentation, pricing and support CTA, with the language selector last; this preserves the requested minimal presentation and restored content.
