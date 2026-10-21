@@ -1,5 +1,5 @@
 # Final presentation updates
-- [ ] Simplify the page to header, hero, benefits and Plus/Pro pricing; verify navigation and layout.
+- [x] Simplify the page to header, hero, benefits and Plus/Pro pricing; verify navigation and layout.
 - [x] Finish removing Discord, update FAQ and link Get config/Get to pricing.
 - [x] Verify the page opens, navigation works and Terms contain no Discord references.
 - [x] Replace three VPN illustrations and add subtle continuous motion.
