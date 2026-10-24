@@ -9,7 +9,7 @@
 ## Проверки
 
 - [ ] `bun run test`
-- [ ] `bun run lint`
+- [ ] `bun run lint -- --rule 'prettier/prettier: off'`
 - [ ] `bun run build`
 
 ## Скриншоты

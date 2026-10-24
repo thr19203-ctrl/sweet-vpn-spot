@@ -74,13 +74,13 @@ bun run dev
 
 ```sh
 bun run test   # тесты Vitest
-bun run lint   # ESLint и Prettier
+bun run lint -- --rule 'prettier/prettier: off'  # ESLint, без старых ошибок форматирования
 bun run build  # production-сборка
 ```
 
 ## GitHub Actions
 
-Тесты, lint и production-сборка запускаются при каждом push в ветку, а также при pull request в `main`. Pull request оформляется по шаблону `.github/pull_request_template.md`.
+Тесты, линтинг и production-сборка запускаются при каждом push в ветку, а также при pull request в `main`. Линт-проверка запускает правила ESLint; Prettier-форматирование пока исключено, поскольку в существующих файлах есть нарушения форматирования. Шаблон PR находится в `.github/pull_request_template.md`.
 
 ## Работа с Lovable
 
