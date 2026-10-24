@@ -1,5 +1,8 @@
 # Sweet Vpn Spot
 
+[![Tests](https://github.com/thr19203-ctrl/sweet-vpn-spot/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/thr19203-ctrl/sweet-vpn-spot/actions/workflows/tests.yml)
+[![Build](https://github.com/thr19203-ctrl/sweet-vpn-spot/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/thr19203-ctrl/sweet-vpn-spot/actions/workflows/build.yml)
+
 Создай весь веб-сайт как у projectreal.gg но только вся тема: про config vpn дизайн в точь в точь всё в точь в точь, вот ДС ссылка ну чтобы присоединялись: https://discord.gg/6DsXVJkEJw
 
 This project was built with [Lovable](https://lovable.dev).
