@@ -2,6 +2,7 @@ import os
 import json
 import urllib.request
 import subprocess
+import re
 
 def run_ai_agent():
     api_key = os.environ.get("OPENROUTER_API_KEY")
@@ -9,7 +10,7 @@ def run_ai_agent():
         print("Error: OPENROUTER_API_KEY is missing!")
         return
 
-    # Запускаем тесты и сохраняем лог ошибки
+    # 1. Запускаем тесты и ловим ошибку
     print("Running tests to capture failure...")
     result = subprocess.run(["bun", "test"], capture_output=True, text=True)
     error_output = result.stderr + "\n" + result.stdout
@@ -28,20 +29,21 @@ def run_ai_agent():
         "X-Title": "Sweet VPN Spot Auto-Heal Agent"
     }
 
+    # Просим модель вернуть имя файла и полностью исправленный код этого файла в блоке кода
     prompt = f"""
-    You are an autonomous SRE and code-healing agent. 
+    You are an autonomous code-healing agent. 
     The project uses Bun and TypeScript/JavaScript.
     Here is the test failure output:
     {error_output}
 
-    Analyze the failure, find the bug in the codebase, and provide a fix.
-    Output your response clearly or make modifications.
+    Analyze the failure, find which file contains the bug, and provide the ENTIRE corrected code for that file.
+    Specify the file path clearly in your response, and enclose the fixed code in a standard markdown code block (e.g. ```typescript ... ```).
     """
 
     payload = {
         "model": "deepseek/deepseek-chat",
         "messages": [
-            {"role": "system", "content": "You fix code errors and return patches or fixed code."},
+            {"role": "system", "content": "You fix code errors and return the fixed file content."},
             {"role": "user", "content": prompt}
         ]
     }
@@ -55,7 +57,25 @@ def run_ai_agent():
             print("AI Response received:")
             print(ai_message)
             
-            # Здесь в будущем можно распарсить ответ от ИИ и применить патч к файлам кода
+            # Пытаемся найти путь к файлу и блок кода в ответ от ИИ
+            # Ищем что-то вроде src/start.ts или пути в тексте
+            match_file = re.search(r'(?:file|path|in)?[:\s`]*([a-zA-Z0-9_\-/]+\.(?:ts|tsx|js|jsx))', ai_message, re.IGNORECASE)
+            match_code = re.search(r'```(?:typescript|javascript|tsx|jsx)?\s*([\s\S]*?)```', ai_message)
+
+            if match_file and match_code:
+                file_path = match_file.group(1).strip()
+                fixed_code = match_code.group(1).strip()
+                
+                if os.path.exists(file_path):
+                    print(f"Applying fix to file: {file_path}")
+                    with open(file_path, "w", encoding="utf-8") as f:
+                        f.write(fixed_code)
+                    print("File successfully updated by AI agent!")
+                else:
+                    print(f"Guessed file path '{file_path}' does not exist locally.")
+            else:
+                print("Could not automatically parse file path or code block from AI response.")
+
     except Exception as e:
         print(f"Failed to communicate with OpenRouter: {e}")
 
