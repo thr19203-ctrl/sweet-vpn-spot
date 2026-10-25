@@ -19,7 +19,7 @@ jobs:
         run: |
           echo "Проверяем доступность сайта..."
           # Здесь можно указать твой реальный URL сайта
-          URL="https://твой-сайт.com"
+          URL="https://sweet-vpn-spot.lovable.app"
           
           # Проверяем ответ сервера
           STATUS=$(curl -o /dev/null -s -w "%{http_code}\n" $URL)
