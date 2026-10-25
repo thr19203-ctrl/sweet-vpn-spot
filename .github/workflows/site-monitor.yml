@@ -1,33 +1,40 @@
-name: Arena AI Site Monitor
+name: Arena AI Advanced Site Monitor
 
 on:
-  # Запускается автоматически каждый день в 9:00 утра (по UTC)
   schedule:
-    - cron: '0 9 * * *'
-  
-  # Также можно запустить вручную кнопкой в интерфейсе GitHub
+    # Запуск каждые 6 часов, чтобы мониторинг был регулярным
+    - cron: '0 */6 * * *'
   workflow_dispatch:
 
 jobs:
-  check-site:
+  deep-check:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Check site availability
+      - name: Advanced Health & Content Check
         run: |
-          echo "Проверяем доступность сайта..."
-          # Здесь можно указать твой реальный URL сайта
-          URL="https://sweet-vpn-spot.lovable.app"
+          echo "🔍 Начинаем углубленную проверку сайта..."
+          URL="https://твой-сайт.com"
           
-          # Проверяем ответ сервера
-          STATUS=$(curl -o /dev/null -s -w "%{http_code}\n" $URL)
-          echo "Статус код сайта: $STATUS"
+          # 1. Проверяем HTTP-статус
+          RESPONSE=$(curl -s -I $URL | head -n 1)
+          echo "Статус ответа: $RESPONSE"
           
-          if [ "$STATUS" -ne 200 ]; then
-            echo "⚠️ ВНИМАНИЕ: Сайт возвращает ошибку $STATUS!"
+          HTTP_CODE=$(curl -o /dev/null -s -w "%{http_code}\n" $URL)
+          
+          if [ "$HTTP_CODE" -ne 200 ]; then
+            echo "❌ КРИТИЧЕСКАЯ ОШИБКА: Сайт недоступен, код ответа: $HTTP_CODE"
             exit 1
-          else
-            echo "✅ Сайт работает нормально (статус 200)."
           fi
+
+          # 2. Проверяем содержимое (ищем ключевое слово на главной, например заголовок или бренд)
+          # Замени 'ТвойКлючевойТекст' на то, что точно есть на главной странице твоего сайта
+          PAGE_CONTENT=$(curl -s $URL)
+          if echo "$PAGE_CONTENT" | grep -q "ТвойКлючевойТекст"; then
+            echo "✅ Контент сайта на месте, ключевой элемент обнаружен."
+          else
+            echo "⚠️ ПРЕДУПРЕЖДЕНИЕ: Сайт отвечает (200 OK), но ключевой текст не найден — возможно, баг фронтенда или заглушка."
+            exit 1
+          fi-
