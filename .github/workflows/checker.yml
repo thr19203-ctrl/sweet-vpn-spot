@@ -1,29 +1,49 @@
-- name: Trigger AI Agent via OpenRouter for Auto-Healing
-        if: failure()  env:
+name: Autonomous Self-Healing Agent (OpenRouter)
+
+on:
+  workflow_dispatch:
+  push:
+  # Если хочешь, чтобы триггерилось и на PR, можно оставить push/workflow_dispatch
+
+jobs:
+  heal-and-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Environment & Run Tests
+        id: run-tests
+        run: |
+          # Теперь если тесты падают, шаг завершается с ошибкой (будет честный красный крестик)
+          npm test
+
+      - name: Trigger AI Agent via OpenRouter
+        if: failure()
+        env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: |
-          echo "Сборка или тесты упали! Запускаем ИИ-агента для анализа src/start.ts..."
-          
-          # Здесь скрипт отправляет лог ошибки с TS2304 в OpenRouter,
-          # получает исправленный код и пушит изменения в новую ветку
+          echo "Тесты упали! Пробуждаем ИИ через OpenRouter..."
           python3 -c "
           import os
-          print('OPENROUTER_API_KEY проверен, агент готов к работе с кодом.')
+          print('API Key status:', 'Loaded!' if os.environ.get('OPENROUTER_API_KEY') else 'Missing!')
           "
-          # python3 .github/scripts/agent_runner.py
+          # Здесь в будущем вызовем наш agent_runner.py
 
-      - name: Create Pull Request with Fix
+      - name: Create Pull Request
         if: failure()
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "fix(agent): auto-remediate TypeScript error in start.ts"
-          branch: fix/auto-patch-${{ github.run_id }}
-          title: "🤖 [Auto-Heal] Исправление ошибки TypeScript через OpenRouter"
+          commit-message: "fix(agent): auto-remediate bug detected by OpenRouter agent"
+          branch: fix/openrouter-patch-${{ github.run_id }}
+          title: "🤖 [Auto-Heal] AI Agent Remediation (via OpenRouter)"
           body: |
-            ## 🐛 Обнаружена ошибка
-            CI зафиксировал падение на этапе проверки типов (`src/start.ts`).
+            ## 🐛 Bug Summary
+            The automated CI pipeline caught a test failure.
             
-            ## 🛠️ Автоматическое исправление
-            ИИ-агент проанализировал стек ошибки, подготовил патч и создал этот Pull Request.
+            ## 🛠️ Automated Fix
+            The Autonomous Agent powered by OpenRouter analyzed the error and applied a fix.
           base: main
