@@ -3,8 +3,6 @@ name: Autonomous Self-Healing Agent (OpenRouter)
 on:
   workflow_dispatch:
   push:
-    branches:
-      - main
 
 jobs:
   heal-and-pr:
@@ -15,25 +13,30 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Environment & Run Tests
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+
+      - name: Install Dependencies
+        run: bun install
+
+      - name: Run Tests
         id: run-tests
         run: |
-          # Проверка тестов проекта
-          npm test || echo "TEST_FAILED=true" >> $GITHUB_ENV
+          bun test
 
       - name: Trigger AI Agent via OpenRouter
-        if: env.TEST_FAILED == 'true'
+        if: failure()
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: |
-          echo "Tests failed! Waking up AI via OpenRouter..."
+          echo "Тесты упали! Пробуждаем ИИ через OpenRouter..."
           python3 -c "
           import os
           print('API Key status:', 'Loaded!' if os.environ.get('OPENROUTER_API_KEY') else 'Missing!')
           "
 
       - name: Create Pull Request
-        if: env.TEST_FAILED == 'true'
+        if: failure()
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
