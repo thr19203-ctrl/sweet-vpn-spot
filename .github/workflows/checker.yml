@@ -3,7 +3,6 @@ name: Autonomous Self-Healing Agent (OpenRouter)
 on:
   workflow_dispatch:
   push:
-  # Если хочешь, чтобы триггерилось и на PR, можно оставить push/workflow_dispatch
 
 jobs:
   heal-and-pr:
@@ -14,10 +13,17 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Environment & Run Tests
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Tests
         id: run-tests
         run: |
-          # Теперь если тесты падают, шаг завершается с ошибкой (будет честный красный крестик)
           npm test
 
       - name: Trigger AI Agent via OpenRouter
@@ -30,7 +36,6 @@ jobs:
           import os
           print('API Key status:', 'Loaded!' if os.environ.get('OPENROUTER_API_KEY') else 'Missing!')
           "
-          # Здесь в будущем вызовем наш agent_runner.py
 
       - name: Create Pull Request
         if: failure()
