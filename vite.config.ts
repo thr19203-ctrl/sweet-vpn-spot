@@ -7,6 +7,14 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
+  vite: {
+    server: {
+      // The dev server is reached through generated preview/tunnel hosts
+      // (e.g. <port>-<sandbox>.e2b.app). Vite's host allowlist rejects those
+      // with "Blocked request", so accept any Host header in development.
+      allowedHosts: true,
+    },
+  },
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
