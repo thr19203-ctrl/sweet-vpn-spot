@@ -31,5 +31,11 @@ dist-ssr
 *.sln
 *.sw?
 
+<<<<<<< HEAD
 # Health probe output
 health-report.json
+=======
+# System temp files
+$Recycle.Bin/
+$WinREAgent/
+>>>>>>> 37edbc4 (auto-fix: SRE health monitoring and quality gate repairs)

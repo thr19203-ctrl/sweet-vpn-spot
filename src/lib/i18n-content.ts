@@ -47,8 +47,43 @@ const K = [
   "f1tags",
 ] as const;
 export type Content = Record<(typeof K)[number], string>;
+<<<<<<< HEAD
 const mk = (a: string[]): Content =>
   Object.fromEntries(K.map((k, i) => [k, a[i] ?? ""])) as Content;
+=======
+const FREE_PLAN_ASIDES = [
+  " Free configs are on the Free plan.",
+  " Бесплатные конфиги — на тарифе Free.",
+  " Hay configs gratis en el plan Free.",
+  " Gratis-Configs gibt es im Free-Plan.",
+  " Des configs gratuites sont dispo sur l'offre Free.",
+  " Configs grátis estão no plano Free.",
+  " Le config gratis sono nel piano Free.",
+  " Ücretsiz configler Free planında.",
+  " Darmowe configi są w planie Free.",
+  " Безкоштовні конфіги — на тарифі Free.",
+  " Тегін конфигтер Free тарифінде.",
+  " Bepul konfiglar Free tarifida.",
+  " الإعدادات المجانية في خطة Free.",
+  " मुफ़्त कॉन्फ़िग Free प्लान में हैं।",
+  " Config gratis ada di paket Free.",
+  " Config miễn phí có ở gói Free.",
+  " คอนฟิกฟรีอยู่ในแพ็กเกจ Free",
+  " 無料設定はFreeプランに。",
+  " 무료 설정은 Free 요금제에 있습니다.",
+  " 免费配置在 Free 方案中。",
+];
+
+function omitRetiredFreePlan(text: string) {
+  return FREE_PLAN_ASIDES.reduce((value, aside) => value.replaceAll(aside, ""), text).trim();
+}
+
+const mk = (a: string[]): Content => {
+  const content = Object.fromEntries(K.map((k, i) => [k, a[i] ?? ""])) as Content;
+  content.a2 = omitRetiredFreePlan(content.a2 ?? "");
+  return content;
+};
+>>>>>>> 37edbc4 (auto-fix: SRE health monitoring and quality gate repairs)
 
 export const CONTENT: Record<string, Content> = {
   en: mk([
@@ -890,7 +925,11 @@ export const CONTENT: Record<string, Content> = {
     "VPN設定とは？",
     "サーバー設定を含むファイルまたはリンク。アプリ（v2rayNG、Hiddify、WireGuard）に取り込めば接続完了。",
     "設定はどう入手する？",
+<<<<<<< HEAD
     "プランを選んで支払えば、設定リンクがすぐ届きます。無料設定はFreeプランに。",
+=======
+    "プランを選んで支払えば、設定リンクがすぐ届きます。無料設定は有料プランでご利用いただけます。",
+>>>>>>> 37edbc4 (auto-fix: SRE health monitoring and quality gate repairs)
     "対応デバイスは？",
     "Android、iOS、Windows、macOS、Linux。v2rayNG、Hiddify、Nekobox、Streisand、WireGuardに対応。",
     "設定が動かなくなったら？",
@@ -984,7 +1023,11 @@ export const CONTENT: Record<string, Content> = {
     "什么是 VPN 配置？",
     "包含服务器设置的文件或链接。导入应用（v2rayNG、Hiddify、WireGuard）即可连接。",
     "如何获取配置？",
+<<<<<<< HEAD
     "选择方案并付款，配置链接即刻送达。免费配置在 Free 方案中。",
+=======
+    "选择方案并付款，配置链接即刻送达。免费配置在付费方案中。",
+>>>>>>> 37edbc4 (auto-fix: SRE health monitoring and quality gate repairs)
     "支持哪些设备？",
     "Android、iOS、Windows、macOS 和 Linux。支持 v2rayNG、Hiddify、Nekobox、Streisand 和 WireGuard。",
     "配置失效了怎么办？",

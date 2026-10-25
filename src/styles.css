@@ -164,7 +164,6 @@
 @keyframes float { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-12px) } }
 @utility animate-float { animation: float 6s ease-in-out infinite; }
 html { scroll-behavior: smooth; }
-html.has-cursor, html.has-cursor * { cursor: none !important; }
 
 @keyframes visual-drift {
   0%, 100% { transform: translate3d(0, 0, 0) scale(1.04); }

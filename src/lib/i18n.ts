@@ -58,6 +58,27 @@ const mk = (x: string[]): Dict => {
     rights: a[16],
   };
 };
+<<<<<<< HEAD
+=======
+
+export function readStoredLang(): string | undefined {
+  try {
+    const value = localStorage.getItem("lang");
+    if (value && Object.hasOwn(LANGS, value)) return value;
+  } catch {
+    // Safari private mode and locked-down browsers throw here.
+  }
+  return undefined;
+}
+
+export function storeLang(lang: string) {
+  try {
+    localStorage.setItem("lang", lang);
+  } catch {
+    // Language still works for the current session without persistence.
+  }
+}
+>>>>>>> 37edbc4 (auto-fix: SRE health monitoring and quality gate repairs)
 
 export const LANGS: Record<string, { name: string; d: Dict; rtl?: boolean }> = {
   en: {
@@ -502,3 +523,21 @@ export const LANGS: Record<string, { name: string; d: Dict; rtl?: boolean }> = {
     ]),
   },
 };
+
+export function readStoredLang(): string | undefined {
+  try {
+    const value = localStorage.getItem("lang");
+    if (value && Object.hasOwn(LANGS, value)) return value;
+  } catch {
+    // Safari private mode and locked-down browsers throw here.
+  }
+  return undefined;
+}
+
+export function storeLang(lang: string) {
+  try {
+    localStorage.setItem("lang", lang);
+  } catch {
+    // Language still works for the current session without persistence.
+  }
+}

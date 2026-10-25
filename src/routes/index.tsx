@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import wave from "@/assets/wave.jpg";
 import laptop from "@/assets/laptop.jpg";
-import { LANGS, type Dict } from "@/lib/i18n";
+import { LANGS, readStoredLang, storeLang, type Dict } from "@/lib/i18n";
 import { CONTENT, type Content } from "@/lib/i18n-content";
 import f1 from "@/assets/server-premium.jpg";
 import f2 from "@/assets/globe-premium.jpg";
@@ -25,7 +25,11 @@ function Reveal({
   className = "",
   delay = 0,
 }: {
+<<<<<<< HEAD
   children: React.ReactNode;
+=======
+  children: ReactNode;
+>>>>>>> 37edbc4 (auto-fix: SRE health monitoring and quality gate repairs)
   className?: string;
   delay?: number;
 }) {
@@ -34,12 +38,15 @@ function Reveal({
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+<<<<<<< HEAD
     // Without IntersectionObserver the reveal would never fire and the whole
     // section would stay at opacity 0, so render it immediately instead.
     if (typeof IntersectionObserver === "undefined") {
       setOn(true);
       return;
     }
+=======
+>>>>>>> 37edbc4 (auto-fix: SRE health monitoring and quality gate repairs)
     const io = new IntersectionObserver(
       ([e]) => {
         if (e?.isIntersecting) {
@@ -99,15 +106,11 @@ function Logo() {
   );
 }
 
-const Btn = ({
-  href,
-  children,
-  light,
-}: {
-  href: string;
-  children: React.ReactNode;
-  light?: boolean;
-}) => (
+<<<<<<< HEAD
+const Btn = ({ href, children, light }: { href: string; children: ReactNode; light?: boolean }) => (
+=======
+const Btn = ({ href, children, light }: { href: string; children: ReactNode; light?: boolean }) => (
+>>>>>>> 37edbc4 (auto-fix: SRE health monitoring and quality gate repairs)
   <Button
     asChild
     variant={light ? "default" : "secondary"}
@@ -120,10 +123,19 @@ const Btn = ({
 function Nav() {
   const t = useT();
   const items = [
-    { id: "Продукт", label: t.nav[0] },
-    { id: "Протоколы", label: t.nav[1] },
-    { id: "Скачать", label: t.nav[2] },
-    { id: "Тарифы", label: t.nav[3] },
+<<<<<<< HEAD
+    { id: "Продукт", label: t.nav[0] ?? "Product" },
+    { id: "Протоколы", label: t.nav[1] ?? "Protocols" },
+    { id: "Скачать", label: t.nav[2] ?? "Download" },
+    { id: "Тарифы", label: t.nav[3] ?? "Pricing" },
+    { id: "Поддержка", label: t.nav[4] ?? "Support" },
+=======
+    { id: "Продукт", label: t.nav[0] ?? "Product" },
+    { id: "Протоколы", label: t.nav[1] ?? "Protocols" },
+    { id: "Скачать", label: t.nav[2] ?? "Download" },
+    { id: "Тарифы", label: t.nav[3] ?? "Pricing" },
+    { id: "Поддержка", label: t.nav[4] ?? "Support" },
+>>>>>>> 37edbc4 (auto-fix: SRE health monitoring and quality gate repairs)
   ];
   return (
     <header className="relative z-20 mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
@@ -339,7 +351,11 @@ function Index() {
   const [lang, setLangState] = useState("ru");
   useEffect(() => {
     const stored = readStoredLang();
+<<<<<<< HEAD
     if (stored && LANGS[stored]) setLangState(stored);
+=======
+    if (stored) setLangState(stored);
+>>>>>>> 37edbc4 (auto-fix: SRE health monitoring and quality gate repairs)
   }, []);
   useEffect(() => {
     document.documentElement.lang = lang;

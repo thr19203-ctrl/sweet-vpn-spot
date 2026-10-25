@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { Play, VideoOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { publishedAssetUrl } from "@/lib/media";
 import { WORKFLOW } from "@/lib/workflow";
 import videoAsset from "@/assets/videos/cfg-workflow.mp4.asset.json";
 import webmAsset from "@/assets/videos/cfg-workflow.webm.asset.json";
@@ -85,7 +86,7 @@ export function Workflow({ lang }: { lang: string }) {
             <video
               key={`video-${attempt}`}
               ref={video}
-              poster={posterAsset.url}
+              poster={publishedAssetUrl(posterAsset.url)}
               controls={started}
               playsInline
               preload="none"
@@ -94,8 +95,8 @@ export function Workflow({ lang }: { lang: string }) {
               onError={fail}
               className="h-full w-full object-contain"
             >
-              <source src={webmAsset.url} type="video/webm" />
-              <source src={videoAsset.url} type="video/mp4" onError={fail} />
+              <source src={publishedAssetUrl(webmAsset.url)} type="video/webm" />
+              <source src={publishedAssetUrl(videoAsset.url)} type="video/mp4" onError={fail} />
             </video>
             {!started && (
               <div className="absolute inset-0 flex items-center justify-center bg-background/20">
