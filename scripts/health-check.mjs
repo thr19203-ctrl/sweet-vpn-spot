@@ -65,15 +65,16 @@ async function probePage(page) {
   const url = `${SITE_URL}${page.path}`;
   const { response, body, elapsedMs } = await request(url);
 
+  // Only a failed request counts as an outage. A 2xx with unexpected content
+  // is reported as "degraded" so a content change never looks like downtime.
   if (!response.ok) throw new Error(`HTTP ${response.status} (${elapsedMs}ms)`);
-  if (body.includes(ERROR_SCREEN)) throw new Error(`error screen rendered (${elapsedMs}ms)`);
 
+  const problems = [];
+  if (body.includes(ERROR_SCREEN)) problems.push("error screen rendered");
   const missing = page.markers.filter((marker) => !body.includes(marker));
-  if (missing.length > 0) {
-    throw new Error(`HTTP ${response.status} but missing content: ${missing.join(", ")}`);
-  }
+  if (missing.length > 0) problems.push(`missing content: ${missing.join(", ")}`);
 
-  return { label: page.label, path: page.path, status: response.status, elapsedMs, body };
+  return { label: page.label, path: page.path, status: response.status, elapsedMs, body, problems };
 }
 
 async function checkPage(page) {
@@ -134,7 +135,11 @@ const pages = [];
 for (const page of PAGES) {
   try {
     const result = await checkPage(page);
-    console.log(`✅ ${page.label} (${result.path}) → ${result.status} in ${result.elapsedMs}ms`);
+    const icon = result.problems.length > 0 ? "⚠️" : "✅";
+    console.log(
+      `${icon} ${page.label} (${result.path}) → ${result.status} in ${result.elapsedMs}ms`,
+    );
+    for (const problem of result.problems) console.warn(`  ⚠ ${problem}`);
     if (result.elapsedMs > SLOW_RESPONSE_MS) {
       console.warn(`  ⚠ slow response (${result.elapsedMs}ms > ${SLOW_RESPONSE_MS}ms)`);
     }
@@ -160,18 +165,31 @@ if (home?.body) {
 }
 
 const pageFailures = pages.filter((page) => !page.ok);
+const degradedPages = pages.filter((page) => page.ok && (page.problems?.length ?? 0) > 0);
 const assetFailures = assets.filter((asset) => !asset.ok);
 const checked = pages.length + assets.length;
-// "down" — users cannot load the site at all.
-// "degraded" — pages render, but something they reference is broken.
-const status = pageFailures.length > 0 ? "down" : assetFailures.length > 0 ? "degraded" : "ok";
+// "down" — users cannot load a page at all.
+// "degraded" — pages load, but their content or a referenced asset is broken.
+const status =
+  pageFailures.length > 0
+    ? "down"
+    : degradedPages.length > 0 || assetFailures.length > 0
+      ? "degraded"
+      : "ok";
+
+const reasons = [
+  ...degradedPages.map((page) => `${page.path}: ${page.problems.join("; ")}`),
+  ...assetFailures.map(
+    (asset) => `${new URL(asset.url).pathname}: ${asset.error ?? `HTTP ${asset.status}`}`,
+  ),
+];
 
 console.log(
   status === "ok"
     ? `\nAll ${checked} checks passed for ${SITE_URL}`
     : status === "down"
       ? `\nOUTAGE: ${pageFailures.length}/${pages.length} pages unreachable for ${SITE_URL}`
-      : `\nDEGRADED: ${assetFailures.length}/${assets.length} assets failed on ${SITE_URL}`,
+      : `\nDEGRADED: ${reasons.length} problem(s) on ${SITE_URL}\n${reasons.map((reason) => `  - ${reason}`).join("\n")}`,
 );
 
 const reportPath = process.env.HEALTH_REPORT ?? "health-report.json";
@@ -192,11 +210,11 @@ await writeFile(
 
 if (process.env.GITHUB_STEP_SUMMARY) {
   const pageRows = pages
-    .map((page) =>
-      page.ok
-        ? `| ${page.path} | ✅ up | ${page.status} | ${page.elapsedMs} ms |`
-        : `| ${page.path} | ❌ down | — | ${page.error} |`,
-    )
+    .map((page) => {
+      if (!page.ok) return `| ${page.path} | ❌ down | — | ${page.error} |`;
+      const note = page.problems?.length ? page.problems.join("; ") : "—";
+      return `| ${page.path} | ${page.problems?.length ? "⚠️ degraded" : "✅ up"} | ${page.status} | ${note} |`;
+    })
     .join("\n");
   const assetRows = assets
     .map((asset) => {
@@ -213,7 +231,7 @@ if (process.env.GITHUB_STEP_SUMMARY) {
       `## Live site health — ${SITE_URL}`,
       "",
       "### Pages",
-      "| Path | Status | Code | Time |",
+      "| Path | Status | Code | Note |",
       "| --- | --- | --- | --- |",
       pageRows,
       "",
