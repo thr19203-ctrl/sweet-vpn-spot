@@ -135,15 +135,35 @@ jobs:
                 ),
             ].join("\n");
 
+            // A long outage is probed every 30 minutes; comment at most once
+            // every six hours so the issue stays readable.
+            const REMINDER_HOURS = 6;
             const existing = openIssues.find((issue) => issue.title === title);
             if (existing) {
-              await github.rest.issues.createComment({
+              const { data: comments } = await github.rest.issues.listComments({
                 owner,
                 repo,
                 issue_number: existing.number,
-                body: `Still failing at ${new Date().toISOString()}.\n\n${details}\n\nWorkflow run: ${runUrl}`,
+                per_page: 100,
               });
-              core.info(`Updated incident #${existing.number}`);
+              const lastComment = comments[comments.length - 1];
+              const hoursSinceLast = lastComment
+                ? (Date.now() - new Date(lastComment.created_at).getTime()) / 3_600_000
+                : Infinity;
+
+              if (hoursSinceLast >= REMINDER_HOURS) {
+                await github.rest.issues.createComment({
+                  owner,
+                  repo,
+                  issue_number: existing.number,
+                  body: `Still failing at ${new Date().toISOString()}.\n\n${details}\n\nWorkflow run: ${runUrl}`,
+                });
+                core.info(`Updated incident #${existing.number}`);
+              } else {
+                core.info(
+                  `Incident #${existing.number} still open; last update ${hoursSinceLast.toFixed(1)}h ago, skipping comment`,
+                );
+              }
             } else {
               const { data: created } = await github.rest.issues.create({
                 owner,
