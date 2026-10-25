@@ -1,0 +1,33 @@
+name: Arena AI Site Monitor
+
+on:
+  # Запускается автоматически каждый день в 9:00 утра (по UTC)
+  schedule:
+    - cron: '0 9 * * *'
+  
+  # Также можно запустить вручную кнопкой в интерфейсе GitHub
+  workflow_dispatch:
+
+jobs:
+  check-site:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check site availability
+        run: |
+          echo "Проверяем доступность сайта..."
+          # Здесь можно указать твой реальный URL сайта
+          URL="https://твой-сайт.com"
+          
+          # Проверяем ответ сервера
+          STATUS=$(curl -o /dev/null -s -w "%{http_code}\n" $URL)
+          echo "Статус код сайта: $STATUS"
+          
+          if [ "$STATUS" -ne 200 ]; then
+            echo "⚠️ ВНИМАНИЕ: Сайт возвращает ошибку $STATUS!"
+            exit 1
+          else
+            echo "✅ Сайт работает нормально (статус 200)."
+          fi
