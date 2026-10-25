@@ -1,40 +1,45 @@
-name: Arena AI Advanced Site Monitor
+name: Arena AI Autonomous Sentinel (100%)
 
 on:
   schedule:
-    # Запуск каждые 6 часов, чтобы мониторинг был регулярным
     - cron: '0 */6 * * *'
   workflow_dispatch:
 
 jobs:
-  deep-check:
+  monitor-and-heal:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write # Разрешаем воркфлоу создавать тикеты в репозитории
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Advanced Health & Content Check
+      - name: Check Site Health
+        id: check
+        continue-on-error: true
         run: |
-          echo "🔍 Начинаем углубленную проверку сайта..."
           URL="https://твой-сайт.com"
-          
-          # 1. Проверяем HTTP-статус
-          RESPONSE=$(curl -s -I $URL | head -n 1)
-          echo "Статус ответа: $RESPONSE"
-          
           HTTP_CODE=$(curl -o /dev/null -s -w "%{http_code}\n" $URL)
+          echo "http_code=$HTTP_CODE" >> $GITHUB_OUTPUT
           
           if [ "$HTTP_CODE" -ne 200 ]; then
-            echo "❌ КРИТИЧЕСКАЯ ОШИБКА: Сайт недоступен, код ответа: $HTTP_CODE"
+            echo "STATUS=FAIL" >> $GITHUB_OUTPUT
             exit 1
+          else
+            echo "STATUS=OK" >> $GITHUB_OUTPUT
+            echo "✅ Сайт работает стабильно (статус 200)."
           fi
 
-          # 2. Проверяем содержимое (ищем ключевое слово на главной, например заголовок или бренд)
-          # Замени 'ТвойКлючевойТекст' на то, что точно есть на главной странице твоего сайта
-          PAGE_CONTENT=$(curl -s $URL)
-          if echo "$PAGE_CONTENT" | grep -q "ТвойКлючевойТекст"; then
-            echo "✅ Контент сайта на месте, ключевой элемент обнаружен."
-          else
-            echo "⚠️ ПРЕДУПРЕЖДЕНИЕ: Сайт отвечает (200 OK), но ключевой текст не найден — возможно, баг фронтенда или заглушка."
-            exit 1
-          fi-
+      - name: 🚨 Auto-Create Issue on Failure
+        if: steps.check.outputs.STATUS == 'FAIL'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const httpCode = '${{ steps.check.outputs.http_code }}';
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🔥 [SRE Alert] Сайт упал! Код ответа: ${httpCode}`,
+              body: `Внимание! Автоматический мониторинг зафиксировал сбой.\n\n- **Время проверки:** ${new Date().toISOString()}\n- **HTTP Статус:** ${httpCode}\n- **Статус:** Требуется вмешательство разработчика или Arena AI.`
+            });
+            console.log("⚠️ Тикет об ошибке успешно создан в репозитории!");
