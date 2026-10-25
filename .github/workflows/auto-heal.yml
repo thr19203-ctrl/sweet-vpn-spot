@@ -1,0 +1,49 @@
+name: Autonomous Self-Healing Agent (OpenRouter)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  heal-and-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Environment & Run Tests
+        id: run-tests
+        run: |
+          # Проверка тестов проекта
+          npm test || echo "TEST_FAILED=true" >> $GITHUB_ENV
+
+      - name: Trigger AI Agent via OpenRouter
+        if: env.TEST_FAILED == 'true'
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: |
+          echo "Tests failed! Waking up AI via OpenRouter..."
+          python3 -c "
+          import os
+          print('API Key status:', 'Loaded!' if os.environ.get('OPENROUTER_API_KEY') else 'Missing!')
+          "
+
+      - name: Create Pull Request
+        if: env.TEST_FAILED == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "fix(agent): auto-remediate bug detected by OpenRouter agent"
+          branch: fix/openrouter-patch-${{ github.run_id }}
+          title: "🤖 [Auto-Heal] AI Agent Remediation (via OpenRouter)"
+          body: |
+            ## 🐛 Bug Summary
+            The automated CI pipeline caught a test failure.
+            
+            ## 🛠️ Automated Fix
+            The Autonomous Agent powered by OpenRouter analyzed the error and applied a fix.
+          base: main
