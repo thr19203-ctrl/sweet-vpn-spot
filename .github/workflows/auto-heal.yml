@@ -1,17 +1,15 @@
-name: Autonomous Self-Healing Agent (OpenRouter)
+name: CI Pipeline
 
 on:
-  workflow_dispatch:
   push:
+  workflow_dispatch:
 
 jobs:
-  heal-and-pr:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v1
@@ -20,29 +18,4 @@ jobs:
         run: bun install
 
       - name: Run Tests
-        id: run-tests
-        run: |
-          bun test
-
-      - name: Trigger AI Agent via OpenRouter
-        if: failure()
-        env:
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-        run: |
-          python3 .github/scripts/agent_runner.py
-
-      - name: Create Pull Request
-        if: failure()
-        uses: peter-evans/create-pull-request@v6
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "fix(agent): auto-remediate bug detected by OpenRouter agent"
-          branch: fix/openrouter-patch-${{ github.run_id }}
-          title: "🤖 [Auto-Heal] AI Agent Remediation (via OpenRouter)"
-          body: |
-            ## 🐛 Bug Summary
-            The automated CI pipeline caught a test failure.
-            
-            ## 🛠️ Automated Fix
-            The Autonomous Agent powered by OpenRouter analyzed the error and prepared a fix.
-          base: main
+        run: bun test
