@@ -1,6 +1,5 @@
 - name: Trigger AI Agent via OpenRouter for Auto-Healing
-        if: failure()
-        env:
+        if: failure()  env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: |
           echo "Сборка или тесты упали! Запускаем ИИ-агента для анализа src/start.ts..."
