@@ -29,11 +29,7 @@ jobs:
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: |
-          echo "Тесты упали! Пробуждаем ИИ через OpenRouter..."
-          python3 -c "
-          import os
-          print('API Key status:', 'Loaded!' if os.environ.get('OPENROUTER_API_KEY') else 'Missing!')
-          "
+          python3 .github/scripts/agent_runner.py
 
       - name: Create Pull Request
         if: failure()
@@ -48,5 +44,5 @@ jobs:
             The automated CI pipeline caught a test failure.
             
             ## 🛠️ Automated Fix
-            The Autonomous Agent powered by OpenRouter analyzed the error and applied a fix.
+            The Autonomous Agent powered by OpenRouter analyzed the error and prepared a fix.
           base: main
