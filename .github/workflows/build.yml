@@ -12,12 +12,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Initialize 24/7 Autonomous Agent
-        run: |
-          echo "::notice::[AGENT 24/7]: Guardian monitor online."
-          date -u
+        run: echo "Guardian monitor online."
 
       - name: Health Check & Uptime Verification
-        run: |
-          echo "Running continuous health diagnostic..."
-          echo "[DIAGNOSTIC]: Core systems operational."
-          echo "[AGENT ACTION]: Self-healing routines standby."
+        run: echo "Core systems operational. Self-healing standby."
