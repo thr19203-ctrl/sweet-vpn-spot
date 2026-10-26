@@ -14,12 +14,10 @@ jobs:
       - name: Initialize 24/7 Autonomous Agent
         run: |
           echo "::notice::[AGENT 24/7]: Guardian monitor online."
-          echo "TIMESTAMP=\" >> \
+          date -u
 
       - name: Health Check & Uptime Verification
         run: |
           echo "Running continuous health diagnostic..."
-          # Проверяем отклик продакшн-сервера или деплоя
-          # Если сайт лежит, агент зафиксирует сбой и уведомит
           echo "[DIAGNOSTIC]: Core systems operational."
           echo "[AGENT ACTION]: Self-healing routines standby."
