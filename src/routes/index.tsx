@@ -25,11 +25,7 @@ function Reveal({
   className = "",
   delay = 0,
 }: {
-<<<<<<< HEAD
-  children: React.ReactNode;
-=======
   children: ReactNode;
->>>>>>> 37edbc4 (auto-fix: SRE health monitoring and quality gate repairs)
   className?: string;
   delay?: number;
 }) {
@@ -38,15 +34,12 @@ function Reveal({
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-<<<<<<< HEAD
     // Without IntersectionObserver the reveal would never fire and the whole
     // section would stay at opacity 0, so render it immediately instead.
     if (typeof IntersectionObserver === "undefined") {
       setOn(true);
       return;
     }
-=======
->>>>>>> 37edbc4 (auto-fix: SRE health monitoring and quality gate repairs)
     const io = new IntersectionObserver(
       ([e]) => {
         if (e?.isIntersecting) {
@@ -106,11 +99,7 @@ function Logo() {
   );
 }
 
-<<<<<<< HEAD
 const Btn = ({ href, children, light }: { href: string; children: ReactNode; light?: boolean }) => (
-=======
-const Btn = ({ href, children, light }: { href: string; children: ReactNode; light?: boolean }) => (
->>>>>>> 37edbc4 (auto-fix: SRE health monitoring and quality gate repairs)
   <Button
     asChild
     variant={light ? "default" : "secondary"}
@@ -123,19 +112,11 @@ const Btn = ({ href, children, light }: { href: string; children: ReactNode; lig
 function Nav() {
   const t = useT();
   const items = [
-<<<<<<< HEAD
     { id: "Продукт", label: t.nav[0] ?? "Product" },
     { id: "Протоколы", label: t.nav[1] ?? "Protocols" },
     { id: "Скачать", label: t.nav[2] ?? "Download" },
     { id: "Тарифы", label: t.nav[3] ?? "Pricing" },
     { id: "Поддержка", label: t.nav[4] ?? "Support" },
-=======
-    { id: "Продукт", label: t.nav[0] ?? "Product" },
-    { id: "Протоколы", label: t.nav[1] ?? "Protocols" },
-    { id: "Скачать", label: t.nav[2] ?? "Download" },
-    { id: "Тарифы", label: t.nav[3] ?? "Pricing" },
-    { id: "Поддержка", label: t.nav[4] ?? "Support" },
->>>>>>> 37edbc4 (auto-fix: SRE health monitoring and quality gate repairs)
   ];
   return (
     <header className="relative z-20 mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
@@ -327,35 +308,11 @@ function LangSwitcher({ lang, setLang }: { lang: string; setLang: (l: string) =>
   );
 }
 
-const STORAGE_KEY = "lang";
-
-// localStorage throws in some privacy modes and sandboxed iframes; a failure
-// there must never take the page down.
-const readStoredLang = () => {
-  try {
-    return localStorage.getItem(STORAGE_KEY);
-  } catch {
-    return null;
-  }
-};
-
-const storeLang = (lang: string) => {
-  try {
-    localStorage.setItem(STORAGE_KEY, lang);
-  } catch {
-    // Persisting the choice is best-effort only.
-  }
-};
-
 function Index() {
   const [lang, setLangState] = useState("ru");
   useEffect(() => {
     const stored = readStoredLang();
-<<<<<<< HEAD
-    if (stored && LANGS[stored]) setLangState(stored);
-=======
     if (stored) setLangState(stored);
->>>>>>> 37edbc4 (auto-fix: SRE health monitoring and quality gate repairs)
   }, []);
   useEffect(() => {
     document.documentElement.lang = lang;

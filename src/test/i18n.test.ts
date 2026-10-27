@@ -1,7 +1,6 @@
-<<<<<<< HEAD
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { LANGS } from "@/lib/i18n";
+import { LANGS, readStoredLang, storeLang } from "@/lib/i18n";
 import { CONTENT } from "@/lib/i18n-content";
 import { WORKFLOW } from "@/lib/workflow";
 
@@ -10,6 +9,10 @@ const languages = Object.keys(LANGS);
 describe("Translations", () => {
   it("offers at least the core language set", () => {
     expect(languages).toEqual(expect.arrayContaining(["en", "ru", "es", "de"]));
+  });
+
+  it("covers the same languages for chrome copy and page copy", () => {
+    expect(Object.keys(CONTENT).sort()).toEqual([...languages].sort());
   });
 
   it("has full page, workflow and language-switcher copy for every language", () => {
@@ -31,34 +34,41 @@ describe("Translations", () => {
         expect(value, `WORKFLOW.${lang}.${key}`).not.toBe("");
       }
     }
-=======
-import { describe, expect, it, vi } from "vitest";
-
-import { CONTENT } from "@/lib/i18n-content";
-import { LANGS, readStoredLang, storeLang } from "@/lib/i18n";
-
-describe("Translations", () => {
-  it("covers the same languages for chrome copy and page copy", () => {
-    expect(Object.keys(CONTENT).sort()).toEqual(Object.keys(LANGS).sort());
   });
 
   it("does not advertise a retired Free plan", () => {
-    for (const copy of Object.values(CONTENT)) {
-      expect(copy.a2).not.toMatch(/\bFree\b/);
+    for (const [lang, copy] of Object.entries(CONTENT)) {
+      expect(copy.a2, `CONTENT.${lang}.a2`).not.toMatch(/\bFree\b/);
     }
+  });
+});
+
+describe("Stored language", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+    localStorage.clear();
   });
 
   it("ignores blocked localStorage instead of crashing", () => {
-    const getItem = vi.spyOn(Storage.prototype, "getItem").mockImplementation(() => {
+    vi.spyOn(Storage.prototype, "getItem").mockImplementation(() => {
       throw new Error("blocked");
     });
-    const setItem = vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
+    vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
       throw new Error("blocked");
     });
     expect(readStoredLang()).toBeUndefined();
     expect(() => storeLang("en")).not.toThrow();
-    getItem.mockRestore();
-    setItem.mockRestore();
->>>>>>> 37edbc4 (auto-fix: SRE health monitoring and quality gate repairs)
+  });
+
+  it("round-trips a supported language", () => {
+    storeLang("de");
+    expect(readStoredLang()).toBe("de");
+  });
+
+  it("rejects unknown values, including Object.prototype keys", () => {
+    for (const bad of ["xx", "constructor", "__proto__", "toString"]) {
+      localStorage.setItem("lang", bad);
+      expect(readStoredLang(), bad).toBeUndefined();
+    }
   });
 });

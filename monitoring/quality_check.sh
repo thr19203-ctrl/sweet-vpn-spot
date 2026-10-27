@@ -8,7 +8,6 @@
 # Usage:
 #   quality_check.sh            # run all gates
 #   quality_check.sh --fast     # lint + test only (skip build)
-#   quality_check.sh --jobs 4   # run with custom npm jobs
 
 set -o pipefail
 
@@ -16,12 +15,10 @@ PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$PROJECT_ROOT" || { echo "FATAL: cannot cd to $PROJECT_ROOT"; exit 1; }
 
 FAST=false
-JOBS=""
 for arg in "$@"; do
   case "$arg" in
     --fast) FAST=true ;;
-    --jobs=*) JOBS="${arg#*=}";;
-    --jobs) JOBS="$2"; shift ;;
+    *) echo "Unknown option: $arg (supported: --fast)" >&2; exit 2 ;;
   esac
 done
 

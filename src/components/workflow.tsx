@@ -77,7 +77,7 @@ export function Workflow({ lang }: { lang: string }) {
             {/* Probes the poster so an unreachable CDN is detected before the click. */}
             <img
               key={`poster-${attempt}`}
-              src={posterAsset.url}
+              src={publishedAssetUrl(posterAsset.url)}
               alt=""
               aria-hidden="true"
               className="hidden"

@@ -47,43 +47,8 @@ const K = [
   "f1tags",
 ] as const;
 export type Content = Record<(typeof K)[number], string>;
-<<<<<<< HEAD
 const mk = (a: string[]): Content =>
   Object.fromEntries(K.map((k, i) => [k, a[i] ?? ""])) as Content;
-=======
-const FREE_PLAN_ASIDES = [
-  " Free configs are on the Free plan.",
-  " Бесплатные конфиги — на тарифе Free.",
-  " Hay configs gratis en el plan Free.",
-  " Gratis-Configs gibt es im Free-Plan.",
-  " Des configs gratuites sont dispo sur l'offre Free.",
-  " Configs grátis estão no plano Free.",
-  " Le config gratis sono nel piano Free.",
-  " Ücretsiz configler Free planında.",
-  " Darmowe configi są w planie Free.",
-  " Безкоштовні конфіги — на тарифі Free.",
-  " Тегін конфигтер Free тарифінде.",
-  " Bepul konfiglar Free tarifida.",
-  " الإعدادات المجانية في خطة Free.",
-  " मुफ़्त कॉन्फ़िग Free प्लान में हैं।",
-  " Config gratis ada di paket Free.",
-  " Config miễn phí có ở gói Free.",
-  " คอนฟิกฟรีอยู่ในแพ็กเกจ Free",
-  " 無料設定はFreeプランに。",
-  " 무료 설정은 Free 요금제에 있습니다.",
-  " 免费配置在 Free 方案中。",
-];
-
-function omitRetiredFreePlan(text: string) {
-  return FREE_PLAN_ASIDES.reduce((value, aside) => value.replaceAll(aside, ""), text).trim();
-}
-
-const mk = (a: string[]): Content => {
-  const content = Object.fromEntries(K.map((k, i) => [k, a[i] ?? ""])) as Content;
-  content.a2 = omitRetiredFreePlan(content.a2 ?? "");
-  return content;
-};
->>>>>>> 37edbc4 (auto-fix: SRE health monitoring and quality gate repairs)
 
 export const CONTENT: Record<string, Content> = {
   en: mk([
@@ -126,7 +91,7 @@ export const CONTENT: Record<string, Content> = {
     "What is a VPN config?",
     "A file or link with server settings. Import it into an app (v2rayNG, Hiddify, WireGuard) and you're connected.",
     "How do I get a config?",
-    "Pick a plan, pay and your config link arrives instantly. Free configs are on the Free plan.",
+    "Pick a plan, pay and your config link arrives instantly.",
     "Which devices are supported?",
     "Android, iOS, Windows, macOS and Linux. Works with v2rayNG, Hiddify, Nekobox, Streisand and WireGuard.",
     "What if my config stops working?",
@@ -173,7 +138,7 @@ export const CONTENT: Record<string, Content> = {
     "Что такое VPN конфиг?",
     "Это файл или ссылка с настройками сервера. Импортируешь в приложение (v2rayNG, Hiddify, WireGuard) — и готово.",
     "Как получить конфиг?",
-    "Выбери тариф, оплати — и ссылка на конфиг придёт мгновенно. Бесплатные конфиги — на тарифе Free.",
+    "Выбери тариф, оплати — и ссылка на конфиг придёт мгновенно.",
     "Какие устройства поддерживаются?",
     "Android, iOS, Windows, macOS и Linux. Работает с v2rayNG, Hiddify, Nekobox, Streisand и WireGuard.",
     "Что делать, если конфиг перестал работать?",
@@ -220,7 +185,7 @@ export const CONTENT: Record<string, Content> = {
     "¿Qué es una config VPN?",
     "Un archivo o enlace con ajustes del servidor. Impórtalo en una app (v2rayNG, Hiddify, WireGuard) y listo.",
     "¿Cómo consigo una config?",
-    "Elige un plan, paga y recibe tu enlace al instante. Hay configs gratis en el plan Free.",
+    "Elige un plan, paga y recibe tu enlace al instante.",
     "¿Qué dispositivos son compatibles?",
     "Android, iOS, Windows, macOS y Linux. Compatible con v2rayNG, Hiddify, Nekobox, Streisand y WireGuard.",
     "¿Qué pasa si mi config deja de funcionar?",
@@ -267,7 +232,7 @@ export const CONTENT: Record<string, Content> = {
     "Was ist eine VPN-Config?",
     "Eine Datei oder ein Link mit Servereinstellungen. In eine App (v2rayNG, Hiddify, WireGuard) importieren — fertig.",
     "Wie bekomme ich eine Config?",
-    "Wähle einen Plan, zahle und dein Config-Link kommt sofort. Gratis-Configs gibt es im Free-Plan.",
+    "Wähle einen Plan, zahle und dein Config-Link kommt sofort.",
     "Welche Geräte werden unterstützt?",
     "Android, iOS, Windows, macOS und Linux. Funktioniert mit v2rayNG, Hiddify, Nekobox, Streisand und WireGuard.",
     "Was, wenn meine Config nicht mehr geht?",
@@ -314,7 +279,7 @@ export const CONTENT: Record<string, Content> = {
     "Qu'est-ce qu'une config VPN ?",
     "Un fichier ou lien avec les réglages du serveur. Importe-le dans une app (v2rayNG, Hiddify, WireGuard) et c'est prêt.",
     "Comment obtenir une config ?",
-    "Choisis une offre, paie et ton lien de config arrive instantanément. Des configs gratuites sont dispo sur l'offre Free.",
+    "Choisis une offre, paie et ton lien de config arrive instantanément.",
     "Quels appareils sont pris en charge ?",
     "Android, iOS, Windows, macOS et Linux. Compatible avec v2rayNG, Hiddify, Nekobox, Streisand et WireGuard.",
     "Que faire si ma config ne marche plus ?",
@@ -361,7 +326,7 @@ export const CONTENT: Record<string, Content> = {
     "O que é uma config VPN?",
     "Um arquivo ou link com as configurações do servidor. Importe num app (v2rayNG, Hiddify, WireGuard) e pronto.",
     "Como consigo uma config?",
-    "Escolha um plano, pague e receba o link da config na hora. Configs grátis estão no plano Free.",
+    "Escolha um plano, pague e receba o link da config na hora.",
     "Quais dispositivos são compatíveis?",
     "Android, iOS, Windows, macOS e Linux. Funciona com v2rayNG, Hiddify, Nekobox, Streisand e WireGuard.",
     "E se minha config parar de funcionar?",
@@ -408,7 +373,7 @@ export const CONTENT: Record<string, Content> = {
     "Cos'è una config VPN?",
     "Un file o link con le impostazioni del server. Importalo in un'app (v2rayNG, Hiddify, WireGuard) ed è fatta.",
     "Come ottengo una config?",
-    "Scegli un piano, paga e il link della config arriva subito. Le config gratis sono nel piano Free.",
+    "Scegli un piano, paga e il link della config arriva subito.",
     "Quali dispositivi sono supportati?",
     "Android, iOS, Windows, macOS e Linux. Funziona con v2rayNG, Hiddify, Nekobox, Streisand e WireGuard.",
     "E se la config smette di funzionare?",
@@ -455,7 +420,7 @@ export const CONTENT: Record<string, Content> = {
     "VPN config nedir?",
     "Sunucu ayarlarını içeren dosya veya link. Uygulamaya (v2rayNG, Hiddify, WireGuard) aktar, bağlan.",
     "Config nasıl alınır?",
-    "Bir plan seç, öde ve config linkin anında gelsin. Ücretsiz configler Free planında.",
+    "Bir plan seç, öde ve config linkin anında gelsin.",
     "Hangi cihazlar destekleniyor?",
     "Android, iOS, Windows, macOS ve Linux. v2rayNG, Hiddify, Nekobox, Streisand ve WireGuard ile çalışır.",
     "Config'im çalışmazsa ne olur?",
@@ -502,7 +467,7 @@ export const CONTENT: Record<string, Content> = {
     "Czym jest config VPN?",
     "Plik lub link z ustawieniami serwera. Zaimportuj do aplikacji (v2rayNG, Hiddify, WireGuard) i gotowe.",
     "Jak dostać config?",
-    "Wybierz plan, zapłać i link do configa przyjdzie natychmiast. Darmowe configi są w planie Free.",
+    "Wybierz plan, zapłać i link do configa przyjdzie natychmiast.",
     "Jakie urządzenia są obsługiwane?",
     "Android, iOS, Windows, macOS i Linux. Działa z v2rayNG, Hiddify, Nekobox, Streisand i WireGuard.",
     "Co, jeśli config przestanie działać?",
@@ -549,7 +514,7 @@ export const CONTENT: Record<string, Content> = {
     "Що таке VPN конфіг?",
     "Файл або посилання з налаштуваннями сервера. Імпортуй у застосунок (v2rayNG, Hiddify, WireGuard) — і готово.",
     "Як отримати конфіг?",
-    "Обери тариф, сплати — і посилання на конфіг прийде миттєво. Безкоштовні конфіги — на тарифі Free.",
+    "Обери тариф, сплати — і посилання на конфіг прийде миттєво.",
     "Які пристрої підтримуються?",
     "Android, iOS, Windows, macOS і Linux. Працює з v2rayNG, Hiddify, Nekobox, Streisand і WireGuard.",
     "Що робити, якщо конфіг перестав працювати?",
@@ -596,7 +561,7 @@ export const CONTENT: Record<string, Content> = {
     "VPN конфиг деген не?",
     "Сервер баптаулары бар файл немесе сілтеме. Қолданбаға (v2rayNG, Hiddify, WireGuard) импортта — болды.",
     "Конфигті қалай алуға болады?",
-    "Тарифті таңда, төле — конфиг сілтемесі бірден келеді. Тегін конфигтер Free тарифінде.",
+    "Тарифті таңда, төле — конфиг сілтемесі бірден келеді.",
     "Қай құрылғылар қолдайды?",
     "Android, iOS, Windows, macOS және Linux. v2rayNG, Hiddify, Nekobox, Streisand және WireGuard-мен жұмыс істейді.",
     "Конфиг жұмыс істемей қалса не істеймін?",
@@ -643,7 +608,7 @@ export const CONTENT: Record<string, Content> = {
     "VPN konfig nima?",
     "Server sozlamalari bor fayl yoki havola. Ilovaga (v2rayNG, Hiddify, WireGuard) import qil — tayyor.",
     "Konfigni qanday olaman?",
-    "Tarifni tanla, to'la — konfig havolasi darhol keladi. Bepul konfiglar Free tarifida.",
+    "Tarifni tanla, to'la — konfig havolasi darhol keladi.",
     "Qaysi qurilmalar qo'llab-quvvatlanadi?",
     "Android, iOS, Windows, macOS va Linux. v2rayNG, Hiddify, Nekobox, Streisand va WireGuard bilan ishlaydi.",
     "Konfig ishlamay qolsa nima qilaman?",
@@ -690,7 +655,7 @@ export const CONTENT: Record<string, Content> = {
     "ما هو إعداد VPN؟",
     "ملف أو رابط بإعدادات الخادم. استورده في تطبيق (v2rayNG، Hiddify، WireGuard) وانتهى.",
     "كيف أحصل على إعداد؟",
-    "اختر خطة وادفع ويصلك رابط الإعداد فورًا. الإعدادات المجانية في خطة Free.",
+    "اختر خطة وادفع ويصلك رابط الإعداد فورًا.",
     "ما الأجهزة المدعومة؟",
     "Android و iOS و Windows و macOS و Linux. يعمل مع v2rayNG و Hiddify و Nekobox و Streisand و WireGuard.",
     "ماذا لو توقف الإعداد عن العمل؟",
@@ -737,7 +702,7 @@ export const CONTENT: Record<string, Content> = {
     "VPN कॉन्फ़िग क्या है?",
     "सर्वर सेटिंग्स वाली फ़ाइल या लिंक। ऐप (v2rayNG, Hiddify, WireGuard) में इम्पोर्ट करें — हो गया।",
     "कॉन्फ़िग कैसे पाएं?",
-    "प्लान चुनें, पेमेंट करें — कॉन्फ़िग लिंक तुरंत मिलेगा। मुफ़्त कॉन्फ़िग Free प्लान में हैं।",
+    "प्लान चुनें, पेमेंट करें — कॉन्फ़िग लिंक तुरंत मिलेगा।",
     "कौन से डिवाइस सपोर्टेड हैं?",
     "Android, iOS, Windows, macOS और Linux। v2rayNG, Hiddify, Nekobox, Streisand और WireGuard के साथ काम करता है।",
     "अगर कॉन्फ़िग काम करना बंद कर दे तो?",
@@ -784,7 +749,7 @@ export const CONTENT: Record<string, Content> = {
     "Apa itu config VPN?",
     "File atau link berisi pengaturan server. Impor ke aplikasi (v2rayNG, Hiddify, WireGuard) dan selesai.",
     "Bagaimana cara dapat config?",
-    "Pilih paket, bayar, dan link config langsung datang. Config gratis ada di paket Free.",
+    "Pilih paket, bayar, dan link config langsung datang.",
     "Perangkat apa saja yang didukung?",
     "Android, iOS, Windows, macOS, dan Linux. Berfungsi dengan v2rayNG, Hiddify, Nekobox, Streisand, dan WireGuard.",
     "Kalau config berhenti jalan bagaimana?",
@@ -831,7 +796,7 @@ export const CONTENT: Record<string, Content> = {
     "Config VPN là gì?",
     "File hoặc link chứa cài đặt máy chủ. Nhập vào ứng dụng (v2rayNG, Hiddify, WireGuard) là xong.",
     "Lấy config thế nào?",
-    "Chọn gói, thanh toán và link config đến ngay. Config miễn phí có ở gói Free.",
+    "Chọn gói, thanh toán và link config đến ngay.",
     "Hỗ trợ những thiết bị nào?",
     "Android, iOS, Windows, macOS và Linux. Dùng được với v2rayNG, Hiddify, Nekobox, Streisand và WireGuard.",
     "Nếu config ngừng hoạt động thì sao?",
@@ -878,7 +843,7 @@ export const CONTENT: Record<string, Content> = {
     "คอนฟิก VPN คืออะไร?",
     "ไฟล์หรือลิงก์ที่มีการตั้งค่าเซิร์ฟเวอร์ นำเข้าแอป (v2rayNG, Hiddify, WireGuard) ก็เชื่อมต่อได้",
     "รับคอนฟิกอย่างไร?",
-    "เลือกแพ็กเกจ จ่ายเงิน แล้วรับลิงก์คอนฟิกทันที คอนฟิกฟรีอยู่ในแพ็กเกจ Free",
+    "เลือกแพ็กเกจ จ่ายเงิน แล้วรับลิงก์คอนฟิกทันที",
     "รองรับอุปกรณ์อะไรบ้าง?",
     "Android, iOS, Windows, macOS และ Linux ใช้ได้กับ v2rayNG, Hiddify, Nekobox, Streisand และ WireGuard",
     "ถ้าคอนฟิกใช้ไม่ได้ทำอย่างไร?",
@@ -925,11 +890,7 @@ export const CONTENT: Record<string, Content> = {
     "VPN設定とは？",
     "サーバー設定を含むファイルまたはリンク。アプリ（v2rayNG、Hiddify、WireGuard）に取り込めば接続完了。",
     "設定はどう入手する？",
-<<<<<<< HEAD
-    "プランを選んで支払えば、設定リンクがすぐ届きます。無料設定はFreeプランに。",
-=======
-    "プランを選んで支払えば、設定リンクがすぐ届きます。無料設定は有料プランでご利用いただけます。",
->>>>>>> 37edbc4 (auto-fix: SRE health monitoring and quality gate repairs)
+    "プランを選んで支払えば、設定リンクがすぐ届きます。",
     "対応デバイスは？",
     "Android、iOS、Windows、macOS、Linux。v2rayNG、Hiddify、Nekobox、Streisand、WireGuardに対応。",
     "設定が動かなくなったら？",
@@ -976,7 +937,7 @@ export const CONTENT: Record<string, Content> = {
     "VPN 설정이란?",
     "서버 설정이 담긴 파일 또는 링크입니다. 앱(v2rayNG, Hiddify, WireGuard)에 가져오면 연결 완료.",
     "설정은 어떻게 받나요?",
-    "요금제를 선택하고 결제하면 설정 링크가 바로 도착합니다. 무료 설정은 Free 요금제에 있습니다.",
+    "요금제를 선택하고 결제하면 설정 링크가 바로 도착합니다.",
     "어떤 기기를 지원하나요?",
     "Android, iOS, Windows, macOS, Linux. v2rayNG, Hiddify, Nekobox, Streisand, WireGuard와 호환.",
     "설정이 작동하지 않으면요?",
@@ -1023,11 +984,7 @@ export const CONTENT: Record<string, Content> = {
     "什么是 VPN 配置？",
     "包含服务器设置的文件或链接。导入应用（v2rayNG、Hiddify、WireGuard）即可连接。",
     "如何获取配置？",
-<<<<<<< HEAD
-    "选择方案并付款，配置链接即刻送达。免费配置在 Free 方案中。",
-=======
-    "选择方案并付款，配置链接即刻送达。免费配置在付费方案中。",
->>>>>>> 37edbc4 (auto-fix: SRE health monitoring and quality gate repairs)
+    "选择方案并付款，配置链接即刻送达。",
     "支持哪些设备？",
     "Android、iOS、Windows、macOS 和 Linux。支持 v2rayNG、Hiddify、Nekobox、Streisand 和 WireGuard。",
     "配置失效了怎么办？",

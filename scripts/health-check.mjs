@@ -44,7 +44,13 @@ const PAGES = [
   { path: "/terms", label: "terms", markers: ["Terms of Use"] },
 ];
 
-const ERROR_SCREEN = "This page didn't load";
+// The standalone error page (src/lib/error-page.ts) prints a literal apostrophe, but
+// the React error boundary in __root.tsx is server-rendered, where React escapes it.
+const ERROR_SCREENS = [
+  "This page didn't load",
+  "This page didn&#x27;t load",
+  "This page didn&#39;t load",
+];
 const ASSET_RE =
   /(?:src|href)="([^"]+\.(?:css|js|mjs|jpe?g|png|webp|svg|ico|woff2?)(?:\?[^"]*)?)"/g;
 
@@ -70,7 +76,9 @@ async function probePage(page) {
   if (!response.ok) throw new Error(`HTTP ${response.status} (${elapsedMs}ms)`);
 
   const problems = [];
-  if (body.includes(ERROR_SCREEN)) problems.push("error screen rendered");
+  if (ERROR_SCREENS.some((marker) => body.includes(marker))) {
+    problems.push("error screen rendered");
+  }
   const missing = page.markers.filter((marker) => !body.includes(marker));
   if (missing.length > 0) problems.push(`missing content: ${missing.join(", ")}`);
 

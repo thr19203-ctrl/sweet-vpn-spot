@@ -22,7 +22,7 @@ const errorMiddleware = createMiddleware().server(async ({ next }) => {
 // from cross-site requests.
 const csrfMiddleware = createCsrfMiddleware({
   filter: (ctx) => ctx.handlerType === "serverFn",
-}); nfnvnvnfnvnnvnnvjjvnjvvjvngjgjnnjbnjbjgbngnjbngjbngjnbjngbjnnjb fnjnnjfvnfvjggmbgmbmmbkrokfof[koookforkfokfokkofofrkfko
+});
 
 export const startInstance = createStart(() => ({
   requestMiddleware: [errorMiddleware, csrfMiddleware],
