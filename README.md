@@ -50,14 +50,6 @@ SITE_URL=http://localhost:8080 bun run health
 
 ## Monitoring
 
-`.github/workflows/checker.yml` keeps the site honest:
-
-- **verify** — on every push and pull request: typecheck, lint, tests, production build.
-- **uptime** — every 30 minutes: probes the live site. On failure it opens a
-  `🚨 Site is down` (pages unreachable) or `⚠️ Site is degraded` (an asset 404s)
-  issue with the failing pages/assets, comments on every repeated failure, and
-  closes the issue automatically once the site recovers.
-
-GitHub pauses scheduled workflows after 60 days without repository activity and
-may delay a run by a few minutes at peak times; any push re-enables the schedule,
-and outages can always be re-checked with **Run workflow**.
+There is no CI workflow in this repository (`.github/workflows` was removed on purpose),
+so run the quality gates above before pushing. `bun run health` probes the live site, and
+`monitoring/` contains optional SRE scripts (see `monitoring/README.md`).

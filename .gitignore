@@ -33,7 +33,3 @@ dist-ssr
 
 # Health probe output
 health-report.json
-
-# System temp files
-$Recycle.Bin/
-$WinREAgent/

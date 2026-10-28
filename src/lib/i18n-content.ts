@@ -1,6 +1,5 @@
 // Full-page translations. Order of keys matches K below.
 const K = [
-  "trust",
   "s1",
   "s2",
   "s3",
@@ -52,7 +51,6 @@ const mk = (a: string[]): Content =>
 
 export const CONTENT: Record<string, Content> = {
   en: mk([
-    "Trusted by 50,000+ people",
     "Server uptime",
     "Average ping",
     "Locations",
@@ -99,7 +97,6 @@ export const CONTENT: Record<string, Content> = {
     "Auto-check|No logs|Unlimited|Live ping",
   ]),
   ru: mk([
-    "Нам доверяют более 50 000 человек",
     "Аптайм серверов",
     "Средний пинг",
     "Локаций",
@@ -146,7 +143,6 @@ export const CONTENT: Record<string, Content> = {
     "Автопроверка|Без логов|Безлимит|Живой пинг",
   ]),
   es: mk([
-    "Más de 50 000 personas confían en nosotros",
     "Uptime de servidores",
     "Ping medio",
     "Ubicaciones",
@@ -193,7 +189,6 @@ export const CONTENT: Record<string, Content> = {
     "Autoprueba|Sin registros|Ilimitado|Ping en vivo",
   ]),
   de: mk([
-    "Über 50.000 Menschen vertrauen uns",
     "Server-Uptime",
     "Durchschn. Ping",
     "Standorte",
@@ -240,7 +235,6 @@ export const CONTENT: Record<string, Content> = {
     "Autotest|Keine Logs|Unbegrenzt|Live-Ping",
   ]),
   fr: mk([
-    "Plus de 50 000 personnes nous font confiance",
     "Disponibilité",
     "Ping moyen",
     "Emplacements",
@@ -287,7 +281,6 @@ export const CONTENT: Record<string, Content> = {
     "Autotest|Sans logs|Illimité|Ping en direct",
   ]),
   pt: mk([
-    "Mais de 50 000 pessoas confiam em nós",
     "Uptime dos servidores",
     "Ping médio",
     "Locais",
@@ -334,7 +327,6 @@ export const CONTENT: Record<string, Content> = {
     "Autoteste|Sem logs|Ilimitado|Ping ao vivo",
   ]),
   it: mk([
-    "Oltre 50.000 persone si fidano di noi",
     "Uptime server",
     "Ping medio",
     "Località",
@@ -381,7 +373,6 @@ export const CONTENT: Record<string, Content> = {
     "Autotest|Nessun log|Illimitato|Ping live",
   ]),
   tr: mk([
-    "50.000+ kişi bize güveniyor",
     "Sunucu çalışma süresi",
     "Ortalama ping",
     "Konum",
@@ -428,7 +419,6 @@ export const CONTENT: Record<string, Content> = {
     "Otomatik test|Kayıt yok|Sınırsız|Canlı ping",
   ]),
   pl: mk([
-    "Zaufało nam ponad 50 000 osób",
     "Uptime serwerów",
     "Średni ping",
     "Lokalizacji",
@@ -475,7 +465,6 @@ export const CONTENT: Record<string, Content> = {
     "Autotest|Bez logów|Bez limitu|Ping na żywo",
   ]),
   uk: mk([
-    "Нам довіряють понад 50 000 людей",
     "Аптайм серверів",
     "Середній пінг",
     "Локацій",
@@ -522,7 +511,6 @@ export const CONTENT: Record<string, Content> = {
     "Автоперевірка|Без логів|Безліміт|Живий пінг",
   ]),
   kk: mk([
-    "Бізге 50 000-нан астам адам сенеді",
     "Сервер аптаймы",
     "Орташа пинг",
     "Локация",
@@ -569,7 +557,6 @@ export const CONTENT: Record<string, Content> = {
     "Автотексеру|Логсыз|Шектеусіз|Тірі пинг",
   ]),
   uz: mk([
-    "Bizga 50 000 dan ortiq odam ishonadi",
     "Server uptime",
     "O'rtacha ping",
     "Joylashuv",
@@ -616,7 +603,6 @@ export const CONTENT: Record<string, Content> = {
     "Avtotekshiruv|Logsiz|Cheksiz|Jonli ping",
   ]),
   ar: mk([
-    "يثق بنا أكثر من 50,000 شخص",
     "جاهزية الخوادم",
     "متوسط البينغ",
     "موقع",
@@ -663,7 +649,6 @@ export const CONTENT: Record<string, Content> = {
     "فحص تلقائي|بدون سجلات|غير محدود|بينغ مباشر",
   ]),
   hi: mk([
-    "50,000+ लोग हम पर भरोसा करते हैं",
     "सर्वर अपटाइम",
     "औसत पिंग",
     "लोकेशन",
@@ -710,7 +695,6 @@ export const CONTENT: Record<string, Content> = {
     "ऑटो-जाँच|कोई लॉग नहीं|असीमित|लाइव पिंग",
   ]),
   id: mk([
-    "Dipercaya 50.000+ orang",
     "Uptime server",
     "Ping rata-rata",
     "Lokasi",
@@ -757,7 +741,6 @@ export const CONTENT: Record<string, Content> = {
     "Uji otomatis|Tanpa log|Tanpa batas|Ping langsung",
   ]),
   vi: mk([
-    "Hơn 50.000 người tin dùng",
     "Uptime máy chủ",
     "Ping trung bình",
     "Vị trí",
@@ -804,7 +787,6 @@ export const CONTENT: Record<string, Content> = {
     "Tự kiểm tra|Không log|Không giới hạn|Ping trực tiếp",
   ]),
   th: mk([
-    "ผู้ใช้กว่า 50,000 คนไว้วางใจ",
     "อัปไทม์เซิร์ฟเวอร์",
     "ปิงเฉลี่ย",
     "โลเคชัน",
@@ -851,7 +833,6 @@ export const CONTENT: Record<string, Content> = {
     "ตรวจอัตโนมัติ|ไม่เก็บล็อก|ไม่จำกัด|ปิงสด",
   ]),
   ja: mk([
-    "5万人以上が信頼",
     "サーバー稼働率",
     "平均Ping",
     "ロケーション",
@@ -898,7 +879,6 @@ export const CONTENT: Record<string, Content> = {
     "自動チェック|ログなし|無制限|ライブPing",
   ]),
   ko: mk([
-    "5만 명 이상이 신뢰합니다",
     "서버 가동률",
     "평균 핑",
     "위치",
@@ -945,7 +925,6 @@ export const CONTENT: Record<string, Content> = {
     "자동 점검|로그 없음|무제한|실시간 핑",
   ]),
   zh: mk([
-    "超过 50,000 人信赖我们",
     "服务器在线率",
     "平均延迟",
     "个节点",

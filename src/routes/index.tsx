@@ -10,7 +10,7 @@ import f3 from "@/assets/devices-premium.jpg";
 import { Button } from "@/components/ui/button";
 import { PLANS, formatPrice, planPrice } from "@/lib/pricing";
 import { Workflow } from "@/components/workflow";
-import { Headphones } from "lucide-react";
+import { Headphones, Menu } from "lucide-react";
 
 type TT = Dict & Content;
 const T = createContext<TT | null>(null);
@@ -30,16 +30,15 @@ function Reveal({
   delay?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const [on, setOn] = useState(false);
+  // Visible by default: the server-rendered page must be readable without JavaScript and
+  // before hydration. Only blocks that start below the fold are hidden, then revealed.
+  const [on, setOn] = useState(true);
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
-    // Without IntersectionObserver the reveal would never fire and the whole
-    // section would stay at opacity 0, so render it immediately instead.
-    if (typeof IntersectionObserver === "undefined") {
-      setOn(true);
-      return;
-    }
+    // Without IntersectionObserver a hidden block would never reveal, so leave it visible.
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    if (el.getBoundingClientRect().top < window.innerHeight) return;
+    setOn(false);
     const io = new IntersectionObserver(
       ([e]) => {
         if (e?.isIntersecting) {
@@ -142,6 +141,26 @@ function Nav() {
         </nav>
       </div>
       <div className="flex items-center gap-2">
+        <details className="relative md:hidden">
+          <summary
+            aria-label="Menu"
+            className="flex h-10 w-10 cursor-pointer list-none items-center justify-center rounded-xl border border-border text-foreground [&::-webkit-details-marker]:hidden"
+          >
+            <Menu className="h-5 w-5" aria-hidden="true" />
+          </summary>
+          <div className="absolute end-0 top-12 z-50 flex w-56 flex-col rounded-xl border border-border bg-background p-2 text-sm font-medium shadow-lg">
+            {items.map((item) => (
+              <a
+                key={item.id}
+                href={`#${item.id}`}
+                onClick={(e) => e.currentTarget.closest("details")?.removeAttribute("open")}
+                className="rounded-lg px-3 py-2 text-foreground/90 transition-colors hover:bg-muted hover:text-foreground"
+              >
+                {item.label}
+              </a>
+            ))}
+          </div>
+        </details>
         <Button asChild className="rounded-xl font-semibold transition-transform hover:scale-105">
           <a href={PRICING}>{t.get} ↗</a>
         </Button>

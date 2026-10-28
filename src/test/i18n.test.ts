@@ -36,6 +36,12 @@ describe("Translations", () => {
     }
   });
 
+  it("keeps a Latin \"Pro\" in allPro so the Plus-card label can be derived from it", () => {
+    for (const [lang, copy] of Object.entries(CONTENT)) {
+      expect(copy.allPro, `CONTENT.${lang}.allPro`).toContain("Pro");
+    }
+  });
+
   it("does not advertise a retired Free plan", () => {
     for (const [lang, copy] of Object.entries(CONTENT)) {
       expect(copy.a2, `CONTENT.${lang}.a2`).not.toMatch(/\bFree\b/);

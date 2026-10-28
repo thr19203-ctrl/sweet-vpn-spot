@@ -14,6 +14,9 @@ set -o pipefail
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$PROJECT_ROOT" || { echo "FATAL: cannot cd to $PROJECT_ROOT"; exit 1; }
 
+# Prefer bun (the project ships bun.lock); fall back to npx.
+if command -v bunx >/dev/null 2>&1; then RUNNER="bunx"; else RUNNER="npx"; fi
+
 FAST=false
 for arg in "$@"; do
   case "$arg" in
@@ -51,17 +54,17 @@ run_gate() {
 }
 
 # Gate 1: Lint (eslint)
-run_gate "lint" "npx eslint ."
+run_gate "lint" "$RUNNER eslint ."
 
 # Gate 2: Test (vitest)
-run_gate "test" "npx vitest run"
+run_gate "test" "$RUNNER vitest run"
 
 # Gate 3: Type check (tsc --noEmit)
-run_gate "types" "npx tsc --noEmit"
+run_gate "types" "$RUNNER tsc --noEmit"
 
 # Gate 4: Build (vite build)
 if [ "$FAST" = false ]; then
-  run_gate "build" "npx vite build 2>&1 | tail -40"
+  run_gate "build" "$RUNNER vite build 2>&1 | tail -40"
 else
   echo ""
   echo ">>> SKIP GATE: build (--fast given)"
