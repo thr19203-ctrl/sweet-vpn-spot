@@ -2,6 +2,8 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import type { ComponentType } from "react";
 import { describe, expect, it } from "vitest";
 
+import { Home } from "@/components/home";
+import { LANGS } from "@/lib/i18n";
 import { Route } from "@/routes/index";
 
 const HomePage = Route.options.component as ComponentType;
@@ -40,5 +42,11 @@ describe("Home page rendering", () => {
     expect(container.querySelector("video")).toBeNull();
     expect(screen.getByRole("status")).toHaveTextContent("Демо-видео временно недоступно.");
     expect(screen.getByRole("button", { name: "Попробовать снова" })).toBeInTheDocument();
+  });
+
+  it("renders the page in the language of the URL", () => {
+    render(<Home lang="de" />);
+
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(LANGS["de"]?.d.h1 ?? "");
   });
 });

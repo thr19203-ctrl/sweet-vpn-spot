@@ -15,6 +15,15 @@ describe("App routing", () => {
     expect(matches.at(-1)?.routeId).not.toBe(rootRouteId);
   });
 
+  it("matches /de to the localized home page", () => {
+    const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
+
+    const match = router.matchRoutes("/de").at(-1);
+
+    expect(match?.routeId).toBe("/$lang");
+    expect(match?.params).toEqual({ lang: "de" });
+  });
+
   it("matches /terms instead of falling back to not found", () => {
     const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
 

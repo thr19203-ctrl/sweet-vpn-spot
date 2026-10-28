@@ -3,32 +3,45 @@ import {
   Outlet,
   Link,
   createRootRouteWithContext,
+  useLocation,
+  useParams,
   useRouter,
   HeadContent,
   Scripts,
   type ErrorComponentProps,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { FAVICON_DATA_URI } from "../lib/favicon";
+import { LANGS, readStoredLang } from "../lib/i18n";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { messagesFor } from "../lib/ui-messages";
+
+// English is rendered on the server; the visitor's stored language replaces it after mount.
+function useScreenMessages() {
+  const [lang, setLang] = useState("en");
+  useEffect(() => {
+    const stored = readStoredLang();
+    if (stored) setLang(stored);
+  }, []);
+  return { messages: messagesFor(lang), dir: LANGS[lang]?.rtl ? "rtl" : "ltr" } as const;
+}
 
 function NotFoundComponent() {
+  const { messages, dir } = useScreenMessages();
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+    <div dir={dir} className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
-        </p>
+        <h2 className="mt-4 text-xl font-semibold text-foreground">{messages.notFoundTitle}</h2>
+        <p className="mt-2 text-sm text-muted-foreground">{messages.notFoundText}</p>
         <div className="mt-6">
           <Link
             to="/"
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Go home
+            {messages.goHome}
           </Link>
         </div>
       </div>
@@ -39,19 +52,18 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: ErrorComponentProps) {
   console.error(error);
   const router = useRouter();
+  const { messages, dir } = useScreenMessages();
   useEffect(() => {
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
   }, [error]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+    <div dir={dir} className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
+          {messages.errorTitle}
         </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong on our end. You can try refreshing or head back home.
-        </p>
+        <p className="mt-2 text-sm text-muted-foreground">{messages.errorText}</p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
             onClick={() => {
@@ -60,13 +72,13 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
             }}
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Try again
+            {messages.tryAgain}
           </button>
           <a
             href="/"
             className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
           >
-            Go home
+            {messages.goHome}
           </a>
         </div>
       </div>
@@ -103,9 +115,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   errorComponent: ErrorComponent,
 });
 
+// Language of the document: the /<code> URL wins, /terms is English-only, everything else is Russian.
+function useDocumentLang(): string {
+  const { lang } = useParams({ strict: false }) as { lang?: string };
+  const pathname = useLocation({ select: (location) => location.pathname });
+  if (lang && Object.hasOwn(LANGS, lang)) return lang;
+  return pathname === "/terms" ? "en" : "ru";
+}
+
 function RootShell({ children }: { children: ReactNode }) {
+  const lang = useDocumentLang();
   return (
-    <html lang="ru">
+    <html lang={lang} dir={LANGS[lang]?.rtl ? "rtl" : "ltr"}>
       <head>
         <HeadContent />
       </head>

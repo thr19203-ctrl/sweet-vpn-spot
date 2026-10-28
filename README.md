@@ -1,6 +1,6 @@
 # Sweet Vpn Spot
 
-Создай весь веб-сайт как у projectreal.gg но только вся тема: про config vpn дизайн в точь в точь всё в точь в точь, вот ДС ссылка ну чтобы присоединялись: https://discord.gg/6DsXVJkEJw
+Cfg — a landing page that sells working VPN configs (VLESS, WireGuard, Shadowsocks, Outline). The site is available in 20 languages; Russian lives at `/` and every other language at `/<code>` (for example `/en`, `/de`).
 
 This project was built with [Lovable](https://lovable.dev).
 

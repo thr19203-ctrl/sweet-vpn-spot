@@ -36,7 +36,7 @@ describe("Translations", () => {
     }
   });
 
-  it("keeps a Latin \"Pro\" in allPro so the Plus-card label can be derived from it", () => {
+  it('keeps a Latin "Pro" in allPro so the Plus-card label can be derived from it', () => {
     for (const [lang, copy] of Object.entries(CONTENT)) {
       expect(copy.allPro, `CONTENT.${lang}.allPro`).toContain("Pro");
     }
