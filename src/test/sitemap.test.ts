@@ -1,12 +1,12 @@
 import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
 import { LANGS } from "@/lib/i18n";
 import { SITE_URL, langPath } from "@/lib/seo";
 
-const read = (file: string) =>
-  readFileSync(new URL(`../../public/${file}`, import.meta.url), "utf-8");
+const read = (file: string) => readFileSync(resolve(process.cwd(), "public", file), "utf-8");
 
 describe("sitemap.xml", () => {
   const sitemap = read("sitemap.xml");
