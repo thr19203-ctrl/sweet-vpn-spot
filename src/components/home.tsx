@@ -92,6 +92,25 @@ const Btn = ({ href, children, light }: { href: string; children: ReactNode; lig
 
 function Nav() {
   const t = useT();
+  const menuRef = useRef<HTMLDetailsElement>(null);
+  const closeMenu = () => {
+    if (menuRef.current) menuRef.current.open = false;
+  };
+  useEffect(() => {
+    const onPointerDown = (e: PointerEvent) => {
+      const menu = menuRef.current;
+      if (menu && e.target instanceof Node && !menu.contains(e.target)) menu.open = false;
+    };
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && menuRef.current) menuRef.current.open = false;
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, []);
   const items = [
     { id: "Продукт", label: t.nav[0] ?? "Product" },
     { id: "Протоколы", label: t.nav[1] ?? "Protocols" },
@@ -123,7 +142,7 @@ function Nav() {
         </nav>
       </div>
       <div className="flex items-center gap-2">
-        <details className="relative md:hidden">
+        <details ref={menuRef} className="relative md:hidden">
           <summary
             aria-label="Menu"
             className="flex h-10 w-10 cursor-pointer list-none items-center justify-center rounded-xl border border-border text-foreground [&::-webkit-details-marker]:hidden"
@@ -135,7 +154,7 @@ function Nav() {
               <a
                 key={item.id}
                 href={`#${item.id}`}
-                onClick={(e) => e.currentTarget.closest("details")?.removeAttribute("open")}
+                onClick={closeMenu}
                 className="rounded-lg px-3 py-2 text-foreground/90 transition-colors hover:bg-muted hover:text-foreground"
               >
                 {item.label}

@@ -49,4 +49,21 @@ describe("Home page rendering", () => {
 
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(LANGS["de"]?.d.h1 ?? "");
   });
+
+  it("closes the mobile menu on an outside click and on Escape, but not on its own button", () => {
+    const { container } = render(<Home />);
+    const summary = container.querySelector('summary[aria-label="Menu"]');
+    const menu = summary?.closest("details") as HTMLDetailsElement;
+
+    menu.open = true;
+    fireEvent.pointerDown(summary as Element);
+    expect(menu.open).toBe(true);
+
+    fireEvent.pointerDown(document.body);
+    expect(menu.open).toBe(false);
+
+    menu.open = true;
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect(menu.open).toBe(false);
+  });
 });

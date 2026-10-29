@@ -42,6 +42,8 @@ const PAGES = [
     markers: ['data-plan="Plus"', 'data-plan="Pro"', "og:title"],
   },
   { path: "/terms", label: "terms", markers: ["Terms of Use"] },
+  { path: "/de", label: "home-de", markers: ['lang="de"', 'data-plan="Plus"'] },
+  { path: "/ar", label: "home-ar", markers: ['lang="ar"', 'dir="rtl"', 'data-plan="Pro"'] },
 ];
 
 // The standalone error page (src/lib/error-page.ts) prints a literal apostrophe, but
