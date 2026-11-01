@@ -8,7 +8,8 @@ import f1 from "@/assets/server-premium.jpg";
 import f2 from "@/assets/globe-premium.jpg";
 import f3 from "@/assets/devices-premium.jpg";
 import { Button } from "@/components/ui/button";
-import { PLANS, formatPrice, planPrice } from "@/lib/pricing";
+import { PLANS, chargeUzs, formatPrice, formatUzs, planPrice } from "@/lib/pricing";
+import { BuyButton } from "@/components/buy-button";
 import { Workflow } from "@/components/workflow";
 import { Headphones, Menu } from "lucide-react";
 
@@ -277,13 +278,22 @@ function Pricing() {
                     {t.perMonth}
                   </span>
                 </div>
-                <Button
-                  asChild
-                  variant="secondary"
-                  className={`mt-6 h-auto rounded-xl py-3 font-semibold ${p.hot ? "bg-primary-foreground text-primary hover:bg-primary-foreground/90" : "group-hover:bg-primary group-hover:text-primary-foreground"}`}
+                <div
+                  className={`mt-2 text-sm ${p.hot ? "text-primary-foreground/70" : "text-muted-foreground"}`}
                 >
-                  <a href={PRICING}>{t.buy}</a>
-                </Button>
+                  {formatUzs(chargeUzs(p.n, year))}
+                </div>
+                <BuyButton
+                  plan={p.n}
+                  yearly={year}
+                  label={t.buy}
+                  className={`mt-6 h-auto rounded-xl py-3 font-semibold ${p.hot ? "bg-primary-foreground text-primary hover:bg-primary-foreground/90" : "group-hover:bg-primary group-hover:text-primary-foreground"}`}
+                />
+                <div
+                  className={`mt-3 text-center text-xs ${p.hot ? "text-primary-foreground/60" : "text-muted-foreground"}`}
+                >
+                  UzCard · Humo · Click
+                </div>
                 <div className={`my-6 h-px ${p.hot ? "bg-primary-foreground/15" : "bg-border"}`} />
                 <ul className="space-y-3 text-sm">
                   {p.f.map((x) => (
