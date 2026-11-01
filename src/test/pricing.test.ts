@@ -6,11 +6,11 @@ describe("User-approved USD pricing", () => {
     expect(PLANS.map((plan) => plan.name)).toEqual(["Plus", "Pro"]);
   });
   it("offers Plus for $2.99", () => {
-    expect(PLANS[0]).toEqual({ name: "Plus", monthly: 2.99 });
+    expect(PLANS[0]).toMatchObject({ name: "Plus", monthly: 2.99 });
     expect(formatPrice(planPrice(PLANS[0].monthly, false))).toBe("$2.99");
   });
   it("offers Pro for $9.99", () => {
-    expect(PLANS[1]).toEqual({ name: "Pro", monthly: 9.99 });
+    expect(PLANS[1]).toMatchObject({ name: "Pro", monthly: 9.99 });
     expect(formatPrice(planPrice(PLANS[1].monthly, false))).toBe("$9.99");
   });
   it("preserves the existing annual discount without rounding to whole dollars", () => {

@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LangRouteImport } from './routes/$lang'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as OrderOrderIdRouteImport } from './routes/order.$orderId'
+import { Route as ApiPublicClickRouteImport } from './routes/api/public/click'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,35 +30,59 @@ const TermsRoute = TermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OrderOrderIdRoute = OrderOrderIdRouteImport.update({
+  id: '/order/$orderId',
+  path: '/order/$orderId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicClickRoute = ApiPublicClickRouteImport.update({
+  id: '/api/public/click',
+  path: '/api/public/click',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$lang': typeof LangRoute
   '/terms': typeof TermsRoute
+  '/order/$orderId': typeof OrderOrderIdRoute
+  '/api/public/click': typeof ApiPublicClickRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$lang': typeof LangRoute
   '/terms': typeof TermsRoute
+  '/order/$orderId': typeof OrderOrderIdRoute
+  '/api/public/click': typeof ApiPublicClickRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/$lang': typeof LangRoute
   '/terms': typeof TermsRoute
+  '/order/$orderId': typeof OrderOrderIdRoute
+  '/api/public/click': typeof ApiPublicClickRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/$lang' | '/terms'
+  fullPaths: '/' | '/$lang' | '/terms' | '/order/$orderId' | '/api/public/click'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/$lang' | '/terms'
-  id: '__root__' | '/' | '/$lang' | '/terms'
+  to: '/' | '/$lang' | '/terms' | '/order/$orderId' | '/api/public/click'
+  id:
+    | '__root__'
+    | '/'
+    | '/$lang'
+    | '/terms'
+    | '/order/$orderId'
+    | '/api/public/click'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LangRoute: typeof LangRoute
   TermsRoute: typeof TermsRoute
+  OrderOrderIdRoute: typeof OrderOrderIdRoute
+  ApiPublicClickRoute: typeof ApiPublicClickRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -82,6 +108,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/order/$orderId': {
+      id: '/order/$orderId'
+      path: '/order/$orderId'
+      fullPath: '/order/$orderId'
+      preLoaderRoute: typeof OrderOrderIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/click': {
+      id: '/api/public/click'
+      path: '/api/public/click'
+      fullPath: '/api/public/click'
+      preLoaderRoute: typeof ApiPublicClickRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -89,6 +129,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LangRoute: LangRoute,
   TermsRoute: TermsRoute,
+  OrderOrderIdRoute: OrderOrderIdRoute,
+  ApiPublicClickRoute: ApiPublicClickRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

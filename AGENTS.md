@@ -14,3 +14,5 @@
 - Keep the uploaded workflow video in a dedicated presentation component with CDN asset pointers and localized copy so it does not add binary media or player state to the page module.
 
 - Keep the homepage limited to the header, hero, benefits, dedicated workflow presentation, pricing and support CTA, with the language selector last; this preserves the requested minimal presentation and restored content.
+- Payments go through the Click Shop API: `createOrder` (src/lib/orders.functions.ts) prices orders server-side from `src/lib/pricing.ts`, and one public callback route `/api/public/click` handles Prepare and Complete after md5 signature checks in `src/lib/click.server.ts`; built-in Stripe/Paddle are unavailable for the seller's country.
+- Orders and the config stock live in `orders` / `configs` with RLS and no client policies; only server code with the admin client touches them, and the `complete_order` database function marks an order paid and assigns one unused config atomically.
