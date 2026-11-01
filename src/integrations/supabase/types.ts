@@ -14,13 +14,80 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      configs: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          order_id: string | null
+          plan: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          order_id?: string | null
+          plan: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          order_id?: string | null
+          plan?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "configs_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: true
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          amount_uzs: number
+          click_trans_id: number | null
+          created_at: string
+          id: string
+          paid_at: string | null
+          plan: string
+          status: string
+          yearly: boolean
+        }
+        Insert: {
+          amount_uzs: number
+          click_trans_id?: number | null
+          created_at?: string
+          id?: string
+          paid_at?: string | null
+          plan: string
+          status?: string
+          yearly?: boolean
+        }
+        Update: {
+          amount_uzs?: number
+          click_trans_id?: number | null
+          created_at?: string
+          id?: string
+          paid_at?: string | null
+          plan?: string
+          status?: string
+          yearly?: boolean
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      complete_order: {
+        Args: { _click_trans_id: number; _order_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
