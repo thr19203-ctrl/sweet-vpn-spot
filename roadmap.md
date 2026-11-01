@@ -1,4 +1,5 @@
 # Final presentation updates
+- [ ] Add payments: Stripe for international buyers, UzCard / Humo / Click for Uzbekistan (blocked: plan upgrade, Russia support, Click merchant account).
 - [ ] Restore workflow with its text and the original bottom support block; verify playback and layout.
 - [x] Simplify the page to header, hero, benefits and Plus/Pro pricing; verify navigation and layout.
 - [x] Finish removing Discord, update FAQ and link Get config/Get to pricing.
