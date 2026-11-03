@@ -1,5 +1,5 @@
 # Final presentation updates
-- [ ] Add Click payments (UzCard, Humo, Click) with config delivery after payment — built; waiting on Click credentials and callback URL setup. International Stripe unavailable for Uzbek sellers.
+- [x] Replace paid plans with a single Free plan whose Start button opens Discord; remove Buy Discord access; update Terms.
 - [ ] Restore workflow with its text and the original bottom support block; verify playback and layout.
 - [x] Simplify the page to header, hero, benefits and Plus/Pro pricing; verify navigation and layout.
 - [x] Finish removing Discord, update FAQ and link Get config/Get to pricing.

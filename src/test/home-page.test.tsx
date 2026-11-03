@@ -9,7 +9,7 @@ import { Route } from "@/routes/index";
 const HomePage = Route.options.component as ComponentType;
 
 describe("Home page rendering", () => {
-  it("renders the hero, both plans, the workflow and the language switcher", () => {
+  it("renders the hero, the Free plan, the workflow and the language switcher", () => {
     render(<HomePage />);
 
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Обходи любые блоки.");
@@ -19,11 +19,16 @@ describe("Home page rendering", () => {
     ).toBeInTheDocument();
 
     const cards = document.querySelectorAll("[data-plan]");
-    expect(cards).toHaveLength(2);
-    expect(cards[0]?.getAttribute("data-plan")).toBe("Plus");
-    expect(cards[0]?.textContent).toContain("$2.99");
-    expect(cards[1]?.getAttribute("data-plan")).toBe("Pro");
-    expect(cards[1]?.textContent).toContain("$9.99");
+    expect(cards).toHaveLength(1);
+    expect(cards[0]?.getAttribute("data-plan")).toBe("Free");
+    expect(cards[0]?.textContent).toContain("$0");
+    expect(cards[0]?.textContent).not.toContain("$2.99");
+    expect(cards[0]?.textContent).not.toContain("$9.99");
+    expect(screen.getByRole("link", { name: "Начать" })).toHaveAttribute(
+      "href",
+      "https://discord.gg/SEMMqXQZdP",
+    );
+    expect(screen.queryByText("Buy Discord access")).toBeNull();
 
     expect(screen.getByRole("link", { name: "Условиями использования" })).toHaveAttribute(
       "href",

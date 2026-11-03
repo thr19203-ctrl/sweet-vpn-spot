@@ -8,9 +8,7 @@ import f1 from "@/assets/server-premium.jpg";
 import f2 from "@/assets/globe-premium.jpg";
 import f3 from "@/assets/devices-premium.jpg";
 import { Button } from "@/components/ui/button";
-import { PLANS, formatPrice, planPrice } from "@/lib/pricing";
-import { BuyButton } from "@/components/buy-button";
-import { DiscordAccess } from "@/components/discord-access";
+import { FREE_PLAN, formatPrice } from "@/lib/pricing";
 import { Workflow } from "@/components/workflow";
 import { Headphones, Menu } from "lucide-react";
 
@@ -199,109 +197,50 @@ function Visual({ src, alt }: { src: string; alt: string }) {
   );
 }
 
-const mkPlans = (t: TT) => [
-  {
-    n: PLANS[0].name,
-    m: PLANS[0].monthly,
-    d: t.pd2,
-    f: [t.allProto, `40+ ${t.s3}`, "1 Gbps", `${t.s4} 24/7`, t.autoCheck],
-  },
-  {
-    n: PLANS[1].name,
-    m: PLANS[1].monthly,
-    d: t.pd3,
-    f: [t.allPro.replace(/Pro/g, "Plus"), `5 ${t.devices}`, t.dedIp, `${t.s4} 24/7`],
-    hot: true,
-  },
-];
-
 function Pricing() {
   const t = useT();
-  const [year, setYear] = useState(false);
+  const features = [t.allProto, `40+ ${t.s3}`, "1 Gbps", `${t.s4} 24/7`, t.autoCheck];
   return (
     <section id="Тарифы" className="mx-auto max-w-4xl px-5 py-20">
       <Reveal className="text-center">
         <div className="text-sm font-medium text-muted-foreground">{t.plans}</div>
         <h2 className="mt-3 text-4xl font-semibold sm:text-6xl">{t.pricing}</h2>
-        <div className="mx-auto mt-8 inline-flex rounded-xl border border-border bg-secondary p-1 text-sm font-medium">
-          {[false, true].map((y) => (
-            <Button
-              variant="ghost"
-              key={String(y)}
-              aria-pressed={year === y}
-              onClick={() => setYear(y)}
-              className={`rounded-lg px-5 py-2 transition-all duration-300 ${year === y ? "bg-primary text-primary-foreground shadow" : "text-muted-foreground hover:text-foreground"}`}
-            >
-              {y ? t.yearly : t.monthly}
-              {y && (
-                <span
-                  className={`ml-2 rounded-md px-1.5 py-0.5 text-[11px] ${year ? "bg-background/15" : "bg-online/20 text-online"}`}
-                >
-                  -20%
-                </span>
-              )}
-            </Button>
-          ))}
-        </div>
       </Reveal>
-      <div className="mt-12 grid gap-5 md:grid-cols-2">
-        {mkPlans(t).map((p, i) => {
-          const price = planPrice(p.m, year);
-          return (
-            <Reveal key={p.n} delay={i * 120}>
-              <div
-                data-plan={p.n}
-                className={`pricing-card group relative flex h-full flex-col rounded-lg border p-7 transition-all duration-300 hover:-translate-y-1 ${p.hot ? "pricing-card-pro border-primary bg-primary text-primary-foreground" : "border-border bg-card"}`}
-              >
-                <div className="flex items-center justify-between">
-                  <div className="text-xl font-semibold">{p.n}</div>
-                  {p.hot && (
-                    <span className="rounded-full bg-primary-foreground px-3 py-1 text-[11px] font-bold tracking-wider text-primary">
-                      {t.popular}
-                    </span>
-                  )}
-                </div>
-                <p
-                  className={`mt-2 text-sm ${p.hot ? "text-primary-foreground/70" : "text-muted-foreground"}`}
-                >
-                  {p.d}
-                </p>
-                <div className="mt-6 flex items-end gap-1">
-                  <span
-                    key={price}
-                    className="animate-in fade-in slide-in-from-bottom-2 whitespace-nowrap text-5xl font-semibold duration-300"
-                  >
-                    {formatPrice(price)}
+      <div className="mx-auto mt-12 max-w-md">
+        <Reveal>
+          <div
+            data-plan={FREE_PLAN.name}
+            className="pricing-card pricing-card-pro group relative flex h-full flex-col rounded-lg border border-primary bg-primary p-7 text-primary-foreground transition-all duration-300 hover:-translate-y-1"
+          >
+            <div className="text-xl font-semibold">{FREE_PLAN.name}</div>
+            <p className="mt-2 text-sm text-primary-foreground/70">{t.pd1}</p>
+            <div className="mt-6 flex items-end gap-1">
+              <span className="whitespace-nowrap text-5xl font-semibold">
+                {formatPrice(FREE_PLAN.monthly)}
+              </span>
+              <span className="mb-1.5 text-sm text-primary-foreground/70">{t.perMonth}</span>
+            </div>
+            <Button
+              asChild
+              className="mt-6 h-auto rounded-xl bg-primary-foreground py-3 font-semibold text-primary hover:bg-primary-foreground/90"
+            >
+              <a href={FREE_PLAN.url} target="_blank" rel="noopener noreferrer">
+                {t.buy}
+              </a>
+            </Button>
+            <div className="my-6 h-px bg-primary-foreground/15" />
+            <ul className="space-y-3 text-sm">
+              {features.map((x) => (
+                <li key={x} className="flex items-center gap-3">
+                  <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary-foreground/10 text-[11px]">
+                    ✓
                   </span>
-                  <span
-                    className={`mb-1.5 text-sm ${p.hot ? "text-primary-foreground/70" : "text-muted-foreground"}`}
-                  >
-                    {t.perMonth}
-                  </span>
-                </div>
-                <BuyButton
-                  plan={p.n}
-                  yearly={year}
-                  label={t.buy}
-                  className={`mt-6 h-auto rounded-xl py-3 font-semibold ${p.hot ? "bg-primary-foreground text-primary hover:bg-primary-foreground/90" : "group-hover:bg-primary group-hover:text-primary-foreground"}`}
-                />
-                <div className={`my-6 h-px ${p.hot ? "bg-primary-foreground/15" : "bg-border"}`} />
-                <ul className="space-y-3 text-sm">
-                  {p.f.map((x) => (
-                    <li key={x} className="flex items-center gap-3">
-                      <span
-                        className={`inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] ${p.hot ? "bg-primary-foreground/10" : "bg-accent"}`}
-                      >
-                        ✓
-                      </span>
-                      {x}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </Reveal>
-          );
-        })}
+                  {x}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Reveal>
       </div>
     </section>
   );
@@ -431,7 +370,6 @@ export function Home({ lang: urlLang }: { lang?: string }) {
           <Workflow lang={lang} />
         </Reveal>
         <Pricing />
-        <DiscordAccess />
         <section id="Поддержка" className="px-5 py-24">
           <Reveal>
             <div className="support-cta relative mx-auto max-w-4xl px-6 py-16 text-center text-foreground">
