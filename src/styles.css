@@ -181,3 +181,6 @@ section:nth-of-type(even) .vpn-visual-image { animation-delay: -4s; animation-du
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition-duration: 0.01ms !important; }
 }
+
+/* hide the platform "Edit in Lovable" badge */
+#lovable-badge, [id^="lovable-badge"] { display: none !important; }
