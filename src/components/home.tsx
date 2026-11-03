@@ -10,6 +10,7 @@ import f3 from "@/assets/devices-premium.jpg";
 import { Button } from "@/components/ui/button";
 import { PLANS, formatPrice, planPrice } from "@/lib/pricing";
 import { BuyButton } from "@/components/buy-button";
+import { DiscordAccess } from "@/components/discord-access";
 import { Workflow } from "@/components/workflow";
 import { Headphones, Menu } from "lucide-react";
 
@@ -430,6 +431,7 @@ export function Home({ lang: urlLang }: { lang?: string }) {
           <Workflow lang={lang} />
         </Reveal>
         <Pricing />
+        <DiscordAccess />
         <section id="Поддержка" className="px-5 py-24">
           <Reveal>
             <div className="support-cta relative mx-auto max-w-4xl px-6 py-16 text-center text-foreground">
