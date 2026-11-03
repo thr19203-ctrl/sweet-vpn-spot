@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 const TITLE = "Terms of Use — Cfg";
-const DESC = "Terms of Use for Cfg VPN configurations and subscriptions.";
+const DESC = "Terms of Use for free Cfg VPN configurations shared through our Discord server.";
 
 export const Route = createFileRoute("/terms")({
   head: () => ({
@@ -21,7 +21,7 @@ const sections: [string, string[]][] = [
   [
     "1. Acceptance of Terms",
     [
-      'By accessing or using Cfg (the "Service"), including our website, VPN configurations and subscriptions, you agree to be bound by these Terms of Use. If you do not agree, do not use the Service.',
+      'By accessing or using Cfg (the "Service"), including our website, our Discord server and the VPN configurations we share, you agree to be bound by these Terms of Use. If you do not agree, do not use the Service.',
     ],
   ],
   [
@@ -33,7 +33,7 @@ const sections: [string, string[]][] = [
   [
     "3. The Service",
     [
-      'Cfg provides VPN configuration files (VLESS, WireGuard, Shadowsocks, Hysteria2 and others) and related support. Configurations are provided "as is" and availability, speed and locations may change at any time without notice.',
+      'Cfg provides free VPN configuration files (VLESS, WireGuard, Shadowsocks, Hysteria2 and others) and related support. Configurations are shared through our Discord server, are provided "as is", and availability, speed and locations may change at any time without notice.',
     ],
   ],
   [
@@ -48,14 +48,15 @@ const sections: [string, string[]][] = [
       "You agree not to use the Service to:",
       "• break any applicable law or regulation;",
       "• send spam, malware or engage in fraud, hacking or abuse of third-party networks;",
-      "• resell, redistribute or publicly share paid configurations;",
+      "• sell, resell or redistribute configurations obtained from Cfg;",
       "• attempt to disrupt, overload or reverse-engineer our infrastructure.",
     ],
   ],
   [
-    "6. Payments and Refunds",
+    "6. Free Access and Discord",
     [
-      "Paid plans (Plus and Pro) are billed in advance for the selected period. Unless required by law, payments are non-refundable. Prices may change; changes will not affect a period you have already paid for.",
+      "The Service is free of charge. Configurations are distributed in our Discord server, which you join through the invite link on our website. Your use of Discord is also subject to Discord's own Terms of Service and Community Guidelines.",
+      "You must follow the rules of our Discord server. We may remove members or revoke access to configurations if these Terms or the server rules are violated.",
     ],
   ],
   [
@@ -98,7 +99,7 @@ function Terms() {
           ← Cfg
         </Link>
         <h1 className="mt-8 text-4xl font-semibold tracking-tight sm:text-5xl">Terms of Use</h1>
-        <p className="mt-3 text-sm text-muted-foreground">Last updated: October 21, 2026</p>
+        <p className="mt-3 text-sm text-muted-foreground">Last updated: November 3, 2026</p>
         <div className="mt-10 space-y-8">
           {sections.map(([h, ps]) => (
             <section key={h}>
