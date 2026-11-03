@@ -1,3 +1,11 @@
+/** The only plan shown on the site: free, joined through the Discord server. */
+export const FREE_PLAN = {
+  name: "Free",
+  monthly: 0,
+  url: "https://discord.gg/SEMMqXQZdP",
+} as const;
+
+/** Paid plans are no longer shown; kept for the existing Click order backend. */
 export const PLANS = [
   { name: "Plus", monthly: 2.99, monthlyUzs: 35000 },
   { name: "Pro", monthly: 9.99, monthlyUzs: 119000 },
