@@ -53,3 +53,25 @@ SITE_URL=http://localhost:8080 bun run health
 There is no CI workflow in this repository (`.github/workflows` was removed on purpose),
 so run the quality gates above before pushing. `bun run health` probes the live site, and
 `monitoring/` contains optional SRE scripts (see `monitoring/README.md`).
+
+## Stripe: paid Discord access
+
+`POST /api/public/stripe-checkout` starts a Stripe Checkout Session and returns `{ url }`.
+After payment Stripe redirects to `/success?session_id=…`, which shows "Success payment!"
+and the Discord invite. `POST /api/public/stripe-webhook` records `checkout.session.completed`
+(signature verified) and issues the invite once per session.
+
+Setup:
+
+1. Apply `drizzle/migrations/0001_stripe_payments.sql` to the database.
+2. Create a one-time Price in Stripe and set the secrets below.
+3. Add a webhook endpoint `https://<your-site>/api/public/stripe-webhook` for
+   `checkout.session.completed` and copy its signing secret.
+
+| Secret | Purpose |
+| --- | --- |
+| `STRIPE_SECRET_KEY` | Stripe API key (`sk_…`) |
+| `STRIPE_PRICE_ID` | One-time Price to sell (`price_…`) |
+| `STRIPE_WEBHOOK_SECRET` | Webhook signing secret (`whsec_…`) |
+| `DISCORD_BOT_TOKEN`, `DISCORD_INVITE_CHANNEL_ID` | Optional: bot with Create Invite permission, issues a single-use 7-day invite per payment |
+| `DISCORD_INVITE_URL` | Optional: permanent invite used when no bot is configured |

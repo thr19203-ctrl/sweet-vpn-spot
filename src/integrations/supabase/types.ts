@@ -46,6 +46,39 @@ export type Database = {
           },
         ]
       }
+      stripe_payments: {
+        Row: {
+          amount_total: number | null
+          created_at: string
+          currency: string | null
+          email: string | null
+          invite_url: string | null
+          paid_at: string
+          session_id: string
+          status: string
+        }
+        Insert: {
+          amount_total?: number | null
+          created_at?: string
+          currency?: string | null
+          email?: string | null
+          invite_url?: string | null
+          paid_at?: string
+          session_id: string
+          status?: string
+        }
+        Update: {
+          amount_total?: number | null
+          created_at?: string
+          currency?: string | null
+          email?: string | null
+          invite_url?: string | null
+          paid_at?: string
+          session_id?: string
+          status?: string
+        }
+        Relationships: []
+      }
       orders: {
         Row: {
           amount_uzs: number
