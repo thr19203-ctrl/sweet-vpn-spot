@@ -11,12 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LangRouteImport } from './routes/$lang'
-import { Route as SuccessRouteImport } from './routes/success'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as OrderOrderIdRouteImport } from './routes/order.$orderId'
 import { Route as ApiPublicClickRouteImport } from './routes/api/public/click'
-import { Route as ApiPublicStripeCheckoutRouteImport } from './routes/api/public/stripe-checkout'
-import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api/public/stripe-webhook'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -26,11 +23,6 @@ const IndexRoute = IndexRouteImport.update({
 const LangRoute = LangRouteImport.update({
   id: '/$lang',
   path: '/$lang',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SuccessRoute = SuccessRouteImport.update({
-  id: '/success',
-  path: '/success',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TermsRoute = TermsRouteImport.update({
@@ -48,90 +40,49 @@ const ApiPublicClickRoute = ApiPublicClickRouteImport.update({
   path: '/api/public/click',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicStripeCheckoutRoute = ApiPublicStripeCheckoutRouteImport.update({
-  id: '/api/public/stripe-checkout',
-  path: '/api/public/stripe-checkout',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiPublicStripeWebhookRoute = ApiPublicStripeWebhookRouteImport.update({
-  id: '/api/public/stripe-webhook',
-  path: '/api/public/stripe-webhook',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$lang': typeof LangRoute
-  '/success': typeof SuccessRoute
   '/terms': typeof TermsRoute
   '/order/$orderId': typeof OrderOrderIdRoute
   '/api/public/click': typeof ApiPublicClickRoute
-  '/api/public/stripe-checkout': typeof ApiPublicStripeCheckoutRoute
-  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$lang': typeof LangRoute
-  '/success': typeof SuccessRoute
   '/terms': typeof TermsRoute
   '/order/$orderId': typeof OrderOrderIdRoute
   '/api/public/click': typeof ApiPublicClickRoute
-  '/api/public/stripe-checkout': typeof ApiPublicStripeCheckoutRoute
-  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/$lang': typeof LangRoute
-  '/success': typeof SuccessRoute
   '/terms': typeof TermsRoute
   '/order/$orderId': typeof OrderOrderIdRoute
   '/api/public/click': typeof ApiPublicClickRoute
-  '/api/public/stripe-checkout': typeof ApiPublicStripeCheckoutRoute
-  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/$lang'
-    | '/success'
-    | '/terms'
-    | '/order/$orderId'
-    | '/api/public/click'
-    | '/api/public/stripe-checkout'
-    | '/api/public/stripe-webhook'
+  fullPaths: '/' | '/$lang' | '/terms' | '/order/$orderId' | '/api/public/click'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/$lang'
-    | '/success'
-    | '/terms'
-    | '/order/$orderId'
-    | '/api/public/click'
-    | '/api/public/stripe-checkout'
-    | '/api/public/stripe-webhook'
+  to: '/' | '/$lang' | '/terms' | '/order/$orderId' | '/api/public/click'
   id:
     | '__root__'
     | '/'
     | '/$lang'
-    | '/success'
     | '/terms'
     | '/order/$orderId'
     | '/api/public/click'
-    | '/api/public/stripe-checkout'
-    | '/api/public/stripe-webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LangRoute: typeof LangRoute
-  SuccessRoute: typeof SuccessRoute
   TermsRoute: typeof TermsRoute
   OrderOrderIdRoute: typeof OrderOrderIdRoute
   ApiPublicClickRoute: typeof ApiPublicClickRoute
-  ApiPublicStripeCheckoutRoute: typeof ApiPublicStripeCheckoutRoute
-  ApiPublicStripeWebhookRoute: typeof ApiPublicStripeWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -148,13 +99,6 @@ declare module '@tanstack/react-router' {
       path: '/$lang'
       fullPath: '/$lang'
       preLoaderRoute: typeof LangRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/success': {
-      id: '/success'
-      path: '/success'
-      fullPath: '/success'
-      preLoaderRoute: typeof SuccessRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/terms': {
@@ -178,32 +122,15 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicClickRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/stripe-checkout': {
-      id: '/api/public/stripe-checkout'
-      path: '/api/public/stripe-checkout'
-      fullPath: '/api/public/stripe-checkout'
-      preLoaderRoute: typeof ApiPublicStripeCheckoutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/stripe-webhook': {
-      id: '/api/public/stripe-webhook'
-      path: '/api/public/stripe-webhook'
-      fullPath: '/api/public/stripe-webhook'
-      preLoaderRoute: typeof ApiPublicStripeWebhookRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LangRoute: LangRoute,
-  SuccessRoute: SuccessRoute,
   TermsRoute: TermsRoute,
   OrderOrderIdRoute: OrderOrderIdRoute,
   ApiPublicClickRoute: ApiPublicClickRoute,
-  ApiPublicStripeCheckoutRoute: ApiPublicStripeCheckoutRoute,
-  ApiPublicStripeWebhookRoute: ApiPublicStripeWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
