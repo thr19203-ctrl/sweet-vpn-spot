@@ -162,9 +162,6 @@ function Nav() {
             ))}
           </div>
         </details>
-        <Button asChild className="rounded-xl font-semibold transition-transform hover:scale-105">
-          <a href={PRICING}>{t.get} ↗</a>
-        </Button>
       </div>
     </header>
   );
